@@ -35,8 +35,12 @@ OOP organizes software around **objects** — bundles of data and behavior. Four
 ```javascript
 class BankAccount {
   #balance = 0;
-  deposit(amt) { this.#balance += amt; }
-  getBalance() { return this.#balance; }
+  deposit(amt) {
+    this.#balance += amt;
+  }
+  getBalance() {
+    return this.#balance;
+  }
 }
 ```
 
@@ -49,8 +53,12 @@ Hide internal state; expose controlled access.
 ```javascript
 class User {
   #password;
-  constructor(pw) { this.#password = pw; }
-  auth(input) { return this.#password === input; }
+  constructor(pw) {
+    this.#password = pw;
+  }
+  auth(input) {
+    return this.#password === input;
+  }
 }
 ```
 
@@ -62,8 +70,12 @@ Expose **what**, hide **how**.
 
 ```javascript
 class PaymentService {
-  pay(amount) { this._charge(amount); }
-  _charge(amount) { /* gateway */ }
+  pay(amount) {
+    this._charge(amount);
+  }
+  _charge(amount) {
+    /* gateway */
+  }
 }
 ```
 
@@ -74,8 +86,16 @@ class PaymentService {
 Child reuses/extends parent.
 
 ```javascript
-class Animal { speak() { return 'sound'; } }
-class Dog extends Animal { speak() { return 'bark'; } }
+class Animal {
+  speak() {
+    return "sound";
+  }
+}
+class Dog extends Animal {
+  speak() {
+    return "bark";
+  }
+}
 ```
 
 ### Q5. What is Polymorphism?
@@ -85,9 +105,19 @@ class Dog extends Animal { speak() { return 'bark'; } }
 Same interface, different runtime behavior.
 
 ```javascript
-class Dog extends Animal { speak() { return 'bark'; } }
-class Cat extends Animal { speak() { return 'meow'; } }
-function makeSpeak(a) { return a.speak(); }
+class Dog extends Animal {
+  speak() {
+    return "bark";
+  }
+}
+class Cat extends Animal {
+  speak() {
+    return "meow";
+  }
+}
+function makeSpeak(animal) {
+  return animal.speak();
+}
 ```
 
 ### Q6. Class vs Object?
@@ -97,8 +127,12 @@ function makeSpeak(a) { return a.speak(); }
 Class = blueprint. Object = instance of class.
 
 ```javascript
-class Car { constructor(brand) { this.brand = brand; } }
-const tesla = new Car('Tesla');
+class Car {
+  constructor(brand) {
+    this.brand = brand;
+  }
+}
+const tesla = new Car("Tesla");
 ```
 
 ### Q7. What is a constructor?
@@ -108,7 +142,11 @@ const tesla = new Car('Tesla');
 Initializes state on instantiation via `new`.
 
 ```javascript
-class Product { constructor(id, name, price) { Object.assign(this,{id,name,price}); } }
+class Product {
+  constructor(id, name, price) {
+    Object.assign(this, { id, name, price });
+  }
+}
 ```
 
 ### Q8. Method overriding?
@@ -118,8 +156,20 @@ class Product { constructor(id, name, price) { Object.assign(this,{id,name,price
 Subclass provides own implementation of parent method.
 
 ```javascript
-class Shape { area() { return 0; } }
-class Circle extends Shape { constructor(r) { super(); this.r=r; } area() { return Math.PI*this.r**2; } }
+class Shape {
+  area() {
+    return 0;
+  }
+}
+class Circle extends Shape {
+  constructor(r) {
+    super();
+    this.r = r;
+  }
+  area() {
+    return Math.PI * this.r ** 2;
+  }
+}
 ```
 
 ### Q9. Method overloading in JS?
@@ -129,7 +179,9 @@ class Circle extends Shape { constructor(r) { super(); this.r=r; } area() { retu
 Use default/variadic parameters; no true overloading.
 
 ```javascript
-function createUser(name, role='user') { return { name, role }; }
+function createUser(name, role = "user") {
+  return { name, role };
+}
 ```
 
 ### Q10. Composition over inheritance?
@@ -139,7 +191,16 @@ function createUser(name, role='user') { return { name, role }; }
 Combine objects/behaviors instead of deep inheritance trees.
 
 ```javascript
-const canFly={fly(){return'flying'}}; class Duck{constructor(){Object.assign(this,canFly)}}
+const canFly = {
+  fly() {
+    return "flying";
+  },
+};
+class Duck {
+  constructor() {
+    Object.assign(this, canFly);
+  }
+}
 ```
 
 ### Q11. What is an interface?
@@ -149,7 +210,11 @@ const canFly={fly(){return'flying'}}; class Duck{constructor(){Object.assign(thi
 Contract without implementation. JS: duck typing.
 
 ```javascript
-class Logger{log(m){console.log(m)}}
+class Logger {
+  log(m) {
+    console.log(m);
+  }
+}
 ```
 
 ### Q12. Abstract class?
@@ -159,7 +224,16 @@ class Logger{log(m){console.log(m)}}
 Cannot instantiate; subclasses implement abstract methods.
 
 ```javascript
-class P{run(){throw Error()}} class IP extends P{run(){return'ok'}}
+class P {
+  run() {
+    throw Error();
+  }
+}
+class IP extends P {
+  run() {
+    return "ok";
+  }
+}
 ```
 
 ### Q13. Coupling?
@@ -169,7 +243,11 @@ class P{run(){throw Error()}} class IP extends P{run(){return'ok'}}
 Inter-module dependency. Keep it low.
 
 ```javascript
-class EmailSvc{constructor(p){this.p=p}}
+class EmailSvc {
+  constructor(p) {
+    this.p = p;
+  }
+}
 ```
 
 ### Q14. Cohesion?
@@ -179,7 +257,11 @@ class EmailSvc{constructor(p){this.p=p}}
 Focus of module responsibilities. Keep it high.
 
 ```javascript
-class Calc{total(items,t){return items.reduce((s,i)=>s+i.p*i.q,0)*(1+t)}}
+class Calc {
+  total(items, t) {
+    return items.reduce((s, i) => s + i.p * i.q, 0) * (1 + t);
+  }
+}
 ```
 
 ### Q15. IS-A vs HAS-A?
@@ -189,7 +271,15 @@ class Calc{total(items,t){return items.reduce((s,i)=>s+i.p*i.q,0)*(1+t)}}
 Inheritance vs composition. Prefer HAS-A.
 
 ```javascript
-class Car{constructor(){this.engine={start(){return'on'}}}}
+class Car {
+  constructor() {
+    this.engine = {
+      start() {
+        return "on";
+      },
+    };
+  }
+}
 ```
 
 ### Q16. Static methods?
@@ -199,7 +289,11 @@ class Car{constructor(){this.engine={start(){return'on'}}}}
 Belong to class, not instance.
 
 ```javascript
-class M{static add(a,b){return a+b}}
+class M {
+  static add(a, b) {
+    return a + b;
+  }
+}
 ```
 
 ### Q17. Immutable object?
@@ -209,7 +303,11 @@ class M{static add(a,b){return a+b}}
 State cannot change after creation.
 
 ```javascript
-class Money{constructor(a,c){Object.freeze(Object.assign(this,{amount:a,currency:c}))}}
+class Money {
+  constructor(a, c) {
+    Object.freeze(Object.assign(this, { amount: a, currency: c }));
+  }
+}
 ```
 
 ### Q18. Value object?
@@ -219,7 +317,14 @@ class Money{constructor(a,c){Object.freeze(Object.assign(this,{amount:a,currency
 Equality by value, not identity.
 
 ```javascript
-class Email{constructor(a){this.a=a.toLowerCase()} equals(o){return this.a===o.a}}
+class Email {
+  constructor(a) {
+    this.a = a.toLowerCase();
+  }
+  equals(o) {
+    return this.a === o.a;
+  }
+}
 ```
 
 ### Q19. Aggregation vs Composition?
@@ -235,7 +340,11 @@ Weak vs strong ownership of contained objects.
 Data carrier across layers without business logic.
 
 ```javascript
-class UserDTO{constructor(d){Object.assign(this,d)}}
+class UserDTO {
+  constructor(d) {
+    Object.assign(this, d);
+  }
+}
 ```
 
 ### Q21. Namespace/module?
@@ -245,7 +354,11 @@ class UserDTO{constructor(d){Object.assign(this,d)}}
 Group related code; JS modules.
 
 ```javascript
-export class User{constructor(n){this.name=n}}
+export class User {
+  constructor(n) {
+    this.name = n;
+  }
+}
 ```
 
 ### Q22. Getter/setter?
@@ -255,7 +368,15 @@ export class User{constructor(n){this.name=n}}
 Controlled property access.
 
 ```javascript
-class T{#c=0;get f(){return this.#c*9/5+32}set c(v){this.#c=v}}
+class T {
+  #c = 0;
+  get f() {
+    return (this.#c * 9) / 5 + 32;
+  }
+  set c(v) {
+    this.#c = v;
+  }
+}
 ```
 
 ### Q23. Duck typing?
@@ -271,7 +392,12 @@ Type determined by behavior.
 Reusable behavior without inheritance.
 
 ```javascript
-const L=B=>class extends B{log(m){console.log(m)}}
+const L = (B) =>
+  class extends B {
+    log(m) {
+      console.log(m);
+    }
+  };
 ```
 
 ### Q25. Prototype chain?
@@ -281,7 +407,12 @@ const L=B=>class extends B{log(m){console.log(m)}}
 JS inheritance via prototype objects.
 
 ```javascript
-const base={greet(){return'hi'}}; Object.create(base)
+const base = {
+  greet() {
+    return "hi";
+  },
+};
+Object.create(base);
 ```
 
 ### Q26. Shallow vs deep clone?
@@ -291,7 +422,7 @@ const base={greet(){return'hi'}}; Object.create(base)
 `{...obj}` vs `structuredClone(obj)`.
 
 ```javascript
-structuredClone({user:{name:'Alice'}})
+structuredClone({ user: { name: "Alice" } });
 ```
 
 ### Q27. Law of Demeter?
@@ -301,7 +432,12 @@ structuredClone({user:{name:'Alice'}})
 Only talk to immediate collaborators.
 
 ```javascript
-class Account{withdraw(a){if(a>this.balance)throw Error();this.balance-=a}}
+class Account {
+  withdraw(a) {
+    if (a > this.balance) throw Error();
+    this.balance -= a;
+  }
+}
 ```
 
 ### Q28. Tell, Don't Ask?
@@ -311,7 +447,12 @@ class Account{withdraw(a){if(a>this.balance)throw Error();this.balance-=a}}
 Tell objects what to do; don't query and decide externally.
 
 ```javascript
-class Order{addItem(i){if(this.status!=='PENDING')throw Error();this.items.push(i)}}
+class Order {
+  addItem(i) {
+    if (this.status !== "PENDING") throw Error();
+    this.items.push(i);
+  }
+}
 ```
 
 ### Q29. Domain model?
@@ -327,7 +468,15 @@ Business entities with enforced invariants.
 Entities without behavior — anti-pattern.
 
 ```javascript
-class Order{#items=[];addItem(i){this.#items.push(i)}total(){return this.#items.reduce((s,i)=>s+i.price,0)}}
+class Order {
+  #items = [];
+  addItem(i) {
+    this.#items.push(i);
+  }
+  total() {
+    return this.#items.reduce((s, i) => s + i.price, 0);
+  }
+}
 ```
 
 ### Q31. Entity vs Value Object?
@@ -337,7 +486,12 @@ class Order{#items=[];addItem(i){this.#items.push(i)}total(){return this.#items.
 Identity-based vs value-based objects.
 
 ```javascript
-class User{constructor(id,n){this.id=id;this.name=n}}
+class User {
+  constructor(id, n) {
+    this.id = id;
+    this.name = n;
+  }
+}
 ```
 
 ### Q32. Aggregate Root?
@@ -347,7 +501,14 @@ class User{constructor(id,n){this.id=id;this.name=n}}
 Entry point to a cluster of domain objects.
 
 ```javascript
-class UserRepo{constructor(db){this.db=db}findById(id){return this.db.find(id)}}
+class UserRepo {
+  constructor(db) {
+    this.db = db;
+  }
+  findById(id) {
+    return this.db.find(id);
+  }
+}
 ```
 
 ### Q33. Repository (concept)?
@@ -357,7 +518,8 @@ class UserRepo{constructor(db){this.db=db}findById(id){return this.db.find(id)}}
 Abstraction over persistence.
 
 ```javascript
-Object.seal({a:1}); Object.freeze({a:1})
+Object.seal({ a: 1 });
+Object.freeze({ a: 1 });
 ```
 
 ### Q34. Service layer?
@@ -385,7 +547,12 @@ Structural vs temporary relationship.
 Cardinality of relationships.
 
 ```javascript
-class UserSvc{create(){}} class EmailSvc{send(){}}
+class UserSvc {
+  create() {}
+}
+class EmailSvc {
+  send() {}
+}
 ```
 
 ### Q38. Fat/God class?
@@ -537,7 +704,17 @@ SRP, OCP, LSP, ISP, DIP.
 One class, one reason to change.
 
 ```javascript
-class User{constructor(n){this.name=n}} class Repo{save(){}} class Email{send(){}}
+class User {
+  constructor(n) {
+    this.name = n;
+  }
+}
+class Repo {
+  save() {}
+}
+class Email {
+  send() {}
+}
 ```
 
 ### Q62. SRP example violation?
@@ -553,7 +730,16 @@ User class doing auth + email + DB.
 Open for extension, closed for modification.
 
 ```javascript
-class Disc{apply(p){return p}} class Student extends Disc{apply(p){return p*0.9}}
+class Disc {
+  apply(p) {
+    return p;
+  }
+}
+class Student extends Disc {
+  apply(p) {
+    return p * 0.9;
+  }
+}
 ```
 
 ### Q64. OCP + Strategy?
@@ -569,7 +755,16 @@ New strategies extend without modifying context.
 Subtypes substitutable for base types.
 
 ```javascript
-class Fly{fly(){return'fly'}} class NoFly{walk(){return'walk'}}
+class Fly {
+  fly() {
+    return "fly";
+  }
+}
+class NoFly {
+  walk() {
+    return "walk";
+  }
+}
 ```
 
 ### Q66. LSP violation example?
@@ -585,7 +780,14 @@ Penguin extends Bird but can't fly.
 No fat interfaces; split by client needs.
 
 ```javascript
-class Workable{work(){}} class Human{work(){return'working'}}
+class Workable {
+  work() {}
+}
+class Human {
+  work() {
+    return "working";
+  }
+}
 ```
 
 ### Q68. Dependency Inversion Principle?
@@ -595,7 +797,11 @@ class Workable{work(){}} class Human{work(){return'working'}}
 Depend on abstractions, not concretions.
 
 ```javascript
-class Svc{constructor(db){this.db=db}}
+class Svc {
+  constructor(db) {
+    this.db = db;
+  }
+}
 ```
 
 ### Q69. Dependency Injection?
@@ -605,7 +811,18 @@ class Svc{constructor(db){this.db=db}}
 Pass dependencies in from outside.
 
 ```javascript
-class NS{constructor(s){this.s=s}notify(m){this.s.send(m)}
+class NotificationService {
+  constructor(sender) {
+    this.sender = sender;
+  }
+
+  notify(message) {
+    this.sender.send(message);
+  }
+}
+
+const emailNotifier = new NotificationService(new EmailSender());
+emailNotifier.notify("Order confirmed!");
 ```
 
 ### Q70. Constructor vs Setter injection?
@@ -621,7 +838,20 @@ Required vs optional dependencies.
 Framework wiring dependency graph.
 
 ```javascript
-class Container{constructor(){this.m=new Map()}register(k,f){this.m.set(k,f)}resolve(k){return this.m.get(k)(this)}}
+class Container {
+  constructor() {
+    this.services = new Map();
+  }
+
+  register(name, factory) {
+    this.services.set(name, factory);
+  }
+
+  resolve(name) {
+    const factory = this.services.get(name);
+    return factory(this);
+  }
+}
 ```
 
 ### Q72. DIP vs DI?
@@ -637,7 +867,13 @@ Principle vs technique.
 Framework calls your code.
 
 ```javascript
-class FW{run(app){app.init();app.handle()}}
+class Framework {
+  run(app) {
+    app.onInit();
+    app.handleRequest();
+    app.onDestroy();
+  }
+}
 ```
 
 ### Q74. God Object anti-pattern?
@@ -665,7 +901,8 @@ Many reasons to change one class.
 Service boundaries mirror principles.
 
 ```javascript
-const h={pdf:exportPdf,csv:exportCsv}; const run=(t,d)=>h[t](d)
+const h = { pdf: exportPdf, csv: exportCsv };
+const run = (t, d) => h[t](d);
 ```
 
 ### Q78. When to break SOLID?
@@ -885,7 +1122,9 @@ One global instance.
 ```javascript
 class DB {
   static #i;
-  static get() { return this.#i ??= new DB(); }
+  static get() {
+    return (this.#i ??= new DB());
+  }
 }
 ```
 
@@ -902,7 +1141,16 @@ Global state, hard to test.
 Subclass decides instantiated type.
 
 ```javascript
-class Dialog{createBtn(){throw Error()}} class Web extends Dialog{createBtn(){return{render:()=>'btn'}}}
+class Dialog {
+  createBtn() {
+    throw Error();
+  }
+}
+class Web extends Dialog {
+  createBtn() {
+    return { render: () => "btn" };
+  }
+}
 ```
 
 ### Q115. Simple Factory?
@@ -912,7 +1160,8 @@ class Dialog{createBtn(){throw Error()}} class Web extends Dialog{createBtn(){re
 Central creation function by type param.
 
 ```javascript
-const m={email:EmailNotif,sms:SmsNotif}; const create=t=>new m[t]()
+const m = { email: EmailNotif, sms: SmsNotif };
+const create = (t) => new m[t]();
 ```
 
 ### Q116. Abstract Factory?
@@ -922,7 +1171,14 @@ const m={email:EmailNotif,sms:SmsNotif}; const create=t=>new m[t]()
 Families of related products.
 
 ```javascript
-class DF{btn(){return new DarkBtn()}check(){return new DarkCheck()}}
+class DF {
+  btn() {
+    return new DarkBtn();
+  }
+  check() {
+    return new DarkCheck();
+  }
+}
 ```
 
 ### Q117. Builder?
@@ -933,9 +1189,17 @@ Fluent step-by-step construction.
 
 ```javascript
 class ReqBuilder {
-  url(u) { this.u = u; return this; }
-  method(m) { this.m = m; return this; }
-  build() { return { url: this.u, method: this.m }; }
+  url(u) {
+    this.u = u;
+    return this;
+  }
+  method(m) {
+    this.m = m;
+    return this;
+  }
+  build() {
+    return { url: this.u, method: this.m };
+  }
 }
 ```
 
@@ -952,7 +1216,12 @@ Factory: which type. Builder: how to configure.
 Clone existing object as template.
 
 ```javascript
-const p={greet(){return`Hi ${this.name}`}}; Object.create(p)
+const p = {
+  greet() {
+    return `Hi ${this.name}`;
+  },
+};
+Object.create(p);
 ```
 
 ### Q120. Object Pool?
@@ -962,7 +1231,16 @@ const p={greet(){return`Hi ${this.name}`}}; Object.create(p)
 Reuse expensive instances.
 
 ```javascript
-class Pool{constructor(max,f){this.max=max;this.pool=[];this.f=f}acquire(){return this.pool.pop()||this.f()}}
+class Pool {
+  constructor(max, f) {
+    this.max = max;
+    this.pool = [];
+    this.f = f;
+  }
+  acquire() {
+    return this.pool.pop() || this.f();
+  }
+}
 ```
 
 ### Q121. When Factory?
@@ -984,7 +1262,18 @@ Many optional constructor params.
 Too many overloads — use Builder.
 
 ```javascript
-class UB{constructor(n){this.d={name:n}}email(e){this.d.email=e;return this}build(){return this.d}}
+class UB {
+  constructor(n) {
+    this.d = { name: n };
+  }
+  email(e) {
+    this.d.email = e;
+    return this;
+  }
+  build() {
+    return this.d;
+  }
+}
 ```
 
 ### Q124. Lazy init?
@@ -994,7 +1283,12 @@ class UB{constructor(n){this.d={name:n}}email(e){this.d.email=e;return this}buil
 Create on first access.
 
 ```javascript
-class H{static #i;static get(){return this.#i??=new H()}}
+class H {
+  static #i;
+  static get() {
+    return (this.#i ??= new H());
+  }
+}
 ```
 
 ### Q125. Multiton?
@@ -1004,7 +1298,8 @@ class H{static #i;static get(){return this.#i??=new H()}}
 One instance per key.
 
 ```javascript
-const inst=new Map(); const get=k=>inst.get(k)||inst.set(k,{}).get(k)
+const inst = new Map();
+const get = (k) => inst.get(k) || inst.set(k, {}).get(k);
 ```
 
 ### Q126. Static factory method?
@@ -1014,7 +1309,11 @@ const inst=new Map(); const get=k=>inst.get(k)||inst.set(k,{}).get(k)
 `User.fromJSON(data)` named constructors.
 
 ```javascript
-class User{static fromJSON(j){return new User(JSON.parse(j).name)}}
+class User {
+  static fromJSON(j) {
+    return new User(JSON.parse(j).name);
+  }
+}
 ```
 
 ### Q127. Fluent interface?
@@ -1024,7 +1323,19 @@ class User{static fromJSON(j){return new User(JSON.parse(j).name)}}
 Method chaining returns `this`.
 
 ```javascript
-class QB{from(t){this.t=t;return this}where(c){this.c=c;return this}build(){return`SELECT * FROM ${this.t} WHERE ${this.c}`}}
+class QB {
+  from(t) {
+    this.t = t;
+    return this;
+  }
+  where(c) {
+    this.c = c;
+    return this;
+  }
+  build() {
+    return `SELECT * FROM ${this.t} WHERE ${this.c}`;
+  }
+}
 ```
 
 ### Q128. Director in Builder?
@@ -1232,7 +1543,19 @@ Creator → Product inheritance.
 DarkThemeFactory vs LightThemeFactory.
 
 ```javascript
-class Legacy{fetch(){return'old'}} class Adapter{constructor(l){this.l=l}get(){return this.l.fetch()}}
+class Legacy {
+  fetch() {
+    return "old";
+  }
+}
+class Adapter {
+  constructor(l) {
+    this.l = l;
+  }
+  get() {
+    return this.l.fetch();
+  }
+}
 ```
 
 ---
@@ -1246,7 +1569,12 @@ class Legacy{fetch(){return'old'}} class Adapter{constructor(l){this.l=l}get(){r
 Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy.
 
 ```javascript
-class Facade{order(u,i){this.auth.verify(u);return this.pay.charge(u,i)}}
+class Facade {
+  order(u, i) {
+    this.auth.verify(u);
+    return this.pay.charge(u, i);
+  }
+}
 ```
 
 ### Q163. Adapter Pattern?
@@ -1256,10 +1584,18 @@ class Facade{order(u,i){this.auth.verify(u);return this.pay.charge(u,i)}}
 Convert interface to one client expects.
 
 ```javascript
-class OldAPI { fetchData() { return 'old'; } }
+class OldAPI {
+  fetchData() {
+    return "old";
+  }
+}
 class Adapter {
-  constructor(old) { this.old = old; }
-  get() { return this.old.fetchData(); }
+  constructor(old) {
+    this.old = old;
+  }
+  get() {
+    return this.old.fetchData();
+  }
 }
 ```
 
@@ -1270,10 +1606,18 @@ class Adapter {
 Add behavior dynamically.
 
 ```javascript
-class Coffee { cost() { return 5; } }
+class Coffee {
+  cost() {
+    return 5;
+  }
+}
 class MilkDecorator {
-  constructor(c) { this.c = c; }
-  cost() { return this.c.cost() + 2; }
+  constructor(c) {
+    this.c = c;
+  }
+  cost() {
+    return this.c.cost() + 2;
+  }
 }
 ```
 
@@ -1284,7 +1628,14 @@ class MilkDecorator {
 Simplified interface to complex subsystem.
 
 ```javascript
-class N{constructor(s){this.s=s}notify(m){return this.s.send(m)}}
+class N {
+  constructor(s) {
+    this.s = s;
+  }
+  notify(m) {
+    return this.s.send(m);
+  }
+}
 ```
 
 ### Q166. Proxy Pattern?
@@ -1295,12 +1646,20 @@ Surrogate controlling access.
 
 ```javascript
 class RealImage {
-  constructor(p) { this.p = p; this.load(); }
-  load() { /* heavy */ }
+  constructor(p) {
+    this.p = p;
+    this.load();
+  }
+  load() {
+    /* heavy */
+  }
   display() {}
 }
 class ImageProxy {
-  constructor(p) { this.p = p; this.real = null; }
+  constructor(p) {
+    this.p = p;
+    this.real = null;
+  }
   display() {
     this.real ??= new RealImage(this.p);
     this.real.display();
@@ -1321,10 +1680,19 @@ Separate abstraction from implementation.
 Tree structure treated uniformly.
 
 ```javascript
-class File { constructor(n) { this.n = n; } }
+class File {
+  constructor(n) {
+    this.n = n;
+  }
+}
 class Folder {
-  constructor(n) { this.n = n; this.children = []; }
-  add(c) { this.children.push(c); }
+  constructor(n) {
+    this.n = n;
+    this.children = [];
+  }
+  add(c) {
+    this.children.push(c);
+  }
 }
 ```
 
@@ -1593,7 +1961,23 @@ Package price = sum of component prices.
 Thousands of objects share few shared instances.
 
 ```javascript
-class File{constructor(n,s){this.n=n;this.s=s}getSize(){return this.s}} class Dir{constructor(){this.c=[]}getSize(){return this.c.reduce((a,f)=>a+f.getSize(),0)}}
+class File {
+  constructor(n, s) {
+    this.n = n;
+    this.s = s;
+  }
+  getSize() {
+    return this.s;
+  }
+}
+class Dir {
+  constructor() {
+    this.c = [];
+  }
+  getSize() {
+    return this.c.reduce((a, f) => a + f.getSize(), 0);
+  }
+}
 ```
 
 ---
@@ -1607,7 +1991,11 @@ class File{constructor(n,s){this.n=n;this.s=s}getSize(){return this.s}} class Di
 Observer, Strategy, Command, State, Template Method, Iterator, Chain of Responsibility, Mediator, Memento, Visitor, Interpreter.
 
 ```javascript
-class ChatRoom{send(m,from,to){to.receive(m,from)}}
+class ChatRoom {
+  send(m, from, to) {
+    to.receive(m, from);
+  }
+}
 ```
 
 ### Q214. Observer Pattern?
@@ -1618,9 +2006,15 @@ Pub-sub: subjects notify observers.
 
 ```javascript
 class EventEmitter {
-  constructor() { this.listeners = {}; }
-  on(e, fn) { (this.listeners[e] ??= []).push(fn); }
-  emit(e, data) { (this.listeners[e]||[]).forEach(fn => fn(data)); }
+  constructor() {
+    this.listeners = {};
+  }
+  on(e, fn) {
+    (this.listeners[e] ??= []).push(fn);
+  }
+  emit(e, data) {
+    (this.listeners[e] || []).forEach((fn) => fn(data));
+  }
 }
 ```
 
@@ -1632,10 +2026,12 @@ Interchangeable algorithms.
 
 ```javascript
 const strategies = {
-  road: (a,b) => a+b,
-  highway: (a,b) => a*0.8+b
+  road: (a, b) => a + b,
+  highway: (a, b) => a * 0.8 + b,
 };
-function route(type, a, b) { return strategies[type](a,b); }
+function route(type, a, b) {
+  return strategies[type](a, b);
+}
 ```
 
 ### Q216. Command Pattern?
@@ -1645,11 +2041,23 @@ function route(type, a, b) { return strategies[type](a,b); }
 Encapsulate request as object.
 
 ```javascript
-class Command { constructor(exec, undo) { this.exec = exec; this.undo = undo; } }
+class Command {
+  constructor(exec, undo) {
+    this.exec = exec;
+    this.undo = undo;
+  }
+}
 class Invoker {
-  constructor() { this.history = []; }
-  run(cmd) { cmd.exec(); this.history.push(cmd); }
-  undo() { this.history.pop()?.undo(); }
+  constructor() {
+    this.history = [];
+  }
+  run(cmd) {
+    cmd.exec();
+    this.history.push(cmd);
+  }
+  undo() {
+    this.history.pop()?.undo();
+  }
 }
 ```
 
@@ -1660,9 +2068,24 @@ class Invoker {
 Object behavior changes with internal state.
 
 ```javascript
-class Locked { unlock(d) { d.state = new Unlocked(); } }
-class Unlocked { lock(d) { d.state = new Locked(); } }
-class Door { constructor() { this.state = new Locked(); } lock() { this.state.lock(this); } }
+class Locked {
+  unlock(d) {
+    d.state = new Unlocked();
+  }
+}
+class Unlocked {
+  lock(d) {
+    d.state = new Locked();
+  }
+}
+class Door {
+  constructor() {
+    this.state = new Locked();
+  }
+  lock() {
+    this.state.lock(this);
+  }
+}
 ```
 
 ### Q218. Template Method?
@@ -1673,9 +2096,16 @@ Skeleton algorithm; subclasses fill steps.
 
 ```javascript
 class DataParser {
-  parse(raw) { const d = this.extract(raw); return this.transform(d); }
-  extract(raw) { throw new Error('implement'); }
-  transform(d) { return d; }
+  parse(raw) {
+    const d = this.extract(raw);
+    return this.transform(d);
+  }
+  extract(raw) {
+    throw new Error("implement");
+  }
+  transform(d) {
+    return d;
+  }
 }
 ```
 
@@ -1687,8 +2117,13 @@ Pass request along handler chain.
 
 ```javascript
 class Handler {
-  setNext(h) { this.next = h; return h; }
-  handle(req) { return this.next?.handle(req); }
+  setNext(h) {
+    this.next = h;
+    return h;
+  }
+  handle(req) {
+    return this.next?.handle(req);
+  }
 }
 ```
 
@@ -1700,8 +2135,12 @@ Traverse collection without exposing internals.
 
 ```javascript
 class Range {
-  constructor(max) { this.max = max; }
-  *[Symbol.iterator]() { for (let i=0;i<this.max;i++) yield i; }
+  constructor(max) {
+    this.max = max;
+  }
+  *[Symbol.iterator]() {
+    for (let i = 0; i < this.max; i++) yield i;
+  }
 }
 ```
 
@@ -1713,7 +2152,9 @@ Central coordinator reduces peer coupling.
 
 ```javascript
 class ChatRoom {
-  send(msg, from, to) { to.receive(msg, from); }
+  send(msg, from, to) {
+    to.receive(msg, from);
+  }
 }
 ```
 
@@ -1724,10 +2165,18 @@ class ChatRoom {
 Save/restore object state.
 
 ```javascript
-class EditorMemento { constructor(content) { this.content = content; } }
+class EditorMemento {
+  constructor(content) {
+    this.content = content;
+  }
+}
 class Editor {
-  save() { return new EditorMemento(this.content); }
-  restore(m) { this.content = m.content; }
+  save() {
+    return new EditorMemento(this.content);
+  }
+  restore(m) {
+    this.content = m.content;
+  }
 }
 ```
 
@@ -1936,7 +2385,15 @@ Established, Listen, Closed states.
 Store mediates components.
 
 ```javascript
-class TL{constructor(){this.s='RED'}next(){const n={RED:'GREEN',GREEN:'YELLOW',YELLOW:'RED'};return this.s=n[this.s]}}
+class TL {
+  constructor() {
+    this.s = "RED";
+  }
+  next() {
+    const n = { RED: "GREEN", GREEN: "YELLOW", YELLOW: "RED" };
+    return (this.s = n[this.s]);
+  }
+}
 ```
 
 ### Q257. Memento caretaker?
@@ -2296,7 +2753,22 @@ Folded corner comment box.
 ParkingLot, Floor, ParkingSpot, Vehicle (Car/Bike/Truck), Ticket, Payment, EntranceGate, ExitGate.
 
 ```javascript
-class ParkingLot{constructor(spots){this.spots=spots;this.tickets=new Map()}park(v){const s=this.spots.find(s=>!s.occupied);if(!s)return null;s.occupied=true;const t={id:Date.now(),s};this.tickets.set(t.id,t);return t}}
+class ParkingLot {
+  constructor(spots) {
+    this.spots = spots;
+    this.tickets = new Map();
+  }
+
+  park(vehicle) {
+    const spot = this.spots.find((s) => !s.occupied);
+    if (!spot) return null;
+
+    spot.occupied = true;
+    const ticket = { id: Date.now(), spot, entryTime: Date.now() };
+    this.tickets.set(ticket.id, ticket);
+    return ticket;
+  }
+}
 ```
 
 ### Q315. Parking Lot — spot assignment?
@@ -2317,7 +2789,10 @@ Lock spot on entry; release on exit. Queue if full.
 **Answer:**
 ```javascript
 class ParkingLot {
-  constructor(floors) { this.floors = floors; this.tickets = new Map(); }
+  constructor(floors) {
+    this.floors = floors;
+    this.tickets = new Map();
+  }
   park(vehicle) {
     const spot = this.findSpot(vehicle);
     if (!spot) return null;
@@ -2341,7 +2816,16 @@ class ParkingLot {
 Elevator, Floor, Request, Controller, Direction enum, scheduling algorithm.
 
 ```javascript
-class Elevator{constructor(id){this.id=id;this.floor=0;this.req=[]}add(f){this.req.push(f)}}
+class Elevator {
+  constructor(id) {
+    this.id = id;
+    this.floor = 0;
+    this.req = [];
+  }
+  add(f) {
+    this.req.push(f);
+  }
+}
 ```
 
 ### Q319. Elevator scheduling?
@@ -2357,11 +2841,17 @@ SCAN/LOOK algorithm, priority for emergencies.
 ```javascript
 class Elevator {
   constructor(id, floors) {
-    this.id = id; this.floor = 0; this.direction = 'IDLE';
+    this.id = id;
+    this.floor = 0;
+    this.direction = "IDLE";
     this.requests = [];
   }
-  addRequest(floor, dir) { this.requests.push({ floor, dir }); }
-  step() { /* move one floor toward target */ }
+  addRequest(floor, dir) {
+    this.requests.push({ floor, dir });
+  }
+  step() {
+    /* move one floor toward target */
+  }
 }
 ```
 
@@ -2372,7 +2862,12 @@ class Elevator {
 Book, Member, Librarian, Catalog, Loan, Reservation, Fine.
 
 ```javascript
-class Book{constructor(i,t){this.isbn=i;this.title=t}}
+class Book {
+  constructor(i, t) {
+    this.isbn = i;
+    this.title = t;
+  }
+}
 ```
 
 ### Q322. Library — search?
@@ -2405,10 +2900,16 @@ Idle → CardInserted → PinEntered → Transaction → EjectCard.
 **Answer:**
 ```javascript
 class ATM {
-  constructor(bank) { this.bank = bank; this.state = 'IDLE'; }
-  insertCard(card) { this.card = card; this.state = 'PIN'; }
+  constructor(bank) {
+    this.bank = bank;
+    this.state = "IDLE";
+  }
+  insertCard(card) {
+    this.card = card;
+    this.state = "PIN";
+  }
   withdraw(amount) {
-    if (!this.bank.validate(this.card, amount)) throw Error('fail');
+    if (!this.bank.validate(this.card, amount)) throw Error("fail");
     return this.bank.debit(this.card.account, amount);
   }
 }
@@ -2438,11 +2939,33 @@ Board 3x3, Player X/O, Game checks win/draw after each move.
 **Answer:**
 ```javascript
 class Board {
-  constructor() { this.cells = Array(9).fill(null); }
-  move(i, p) { if (this.cells[i]) return false; this.cells[i]=p; return true; }
+  constructor() {
+    this.cells = Array(9).fill(null);
+  }
+  move(i, p) {
+    if (this.cells[i]) return false;
+    this.cells[i] = p;
+    return true;
+  }
   winner() {
-    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-    return wins.find(([a,b,c]) => this.cells[a] && this.cells[a]===this.cells[b] && this.cells[b]===this.cells[c])?.map(i=>this.cells[i])[0];
+    const wins = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    return wins
+      .find(
+        ([a, b, c]) =>
+          this.cells[a] &&
+          this.cells[a] === this.cells[b] &&
+          this.cells[b] === this.cells[c],
+      )
+      ?.map((i) => this.cells[i])[0];
   }
 }
 ```
@@ -2466,7 +2989,14 @@ Product, Inventory, Coin inventory, State pattern for coin insertion.
 Idle, HasMoney, Dispensing, ReturnChange.
 
 ```javascript
-class VM{constructor(){this.bal=0}coin(a){this.bal+=a}}
+class VM {
+  constructor() {
+    this.bal = 0;
+  }
+  coin(a) {
+    this.bal += a;
+  }
+}
 ```
 
 ### Q334. Design Hotel Booking?
@@ -2488,7 +3018,24 @@ Optimistic lock on reservation slot; transaction on book.
 Cinema, Screen, Show, Seat, Booking, Payment — seat lock during checkout.
 
 ```javascript
-class LRU{constructor(c){this.c=c;this.m=new Map()}get(k){if(!this.m.has(k))return-1;const v=this.m.get(k);this.m.delete(k);this.m.set(k,v);return v}put(k,v){if(this.m.has(k))this.m.delete(k);this.m.set(k,v);if(this.m.size>this.c)this.m.delete(this.m.keys().next().value)}}
+class LRU {
+  constructor(c) {
+    this.c = c;
+    this.m = new Map();
+  }
+  get(k) {
+    if (!this.m.has(k)) return -1;
+    const v = this.m.get(k);
+    this.m.delete(k);
+    this.m.set(k, v);
+    return v;
+  }
+  put(k, v) {
+    if (this.m.has(k)) this.m.delete(k);
+    this.m.set(k, v);
+    if (this.m.size > this.c) this.m.delete(this.m.keys().next().value);
+  }
+}
 ```
 
 ### Q337. Seat locking strategy?
@@ -2498,7 +3045,29 @@ class LRU{constructor(c){this.c=c;this.m=new Map()}get(k){if(!this.m.has(k))retu
 Temporary hold (5 min TTL) then release.
 
 ```javascript
-class TB{constructor(r,c){this.r=r;this.c=c;this.t=c;this.l=Date.now()}allow(){const n=Date.now();this.t=Math.min(this.c,this.t+(n-this.l)/1000*this.r);this.l=n;if(this.t>=1){this.t--;return true}return false}}
+class TokenBucket {
+  constructor(rate, capacity) {
+    this.rate = rate;
+    this.capacity = capacity;
+    this.tokens = capacity;
+    this.lastRefill = Date.now();
+  }
+
+  allow() {
+    const now = Date.now();
+    this.tokens = Math.min(
+      this.capacity,
+      this.tokens + ((now - this.lastRefill) / 1000) * this.rate,
+    );
+    this.lastRefill = now;
+
+    if (this.tokens >= 1) {
+      this.tokens--;
+      return true;
+    }
+    return false;
+  }
+}
 ```
 
 ### Q338. Design Restaurant Order System?
@@ -2508,7 +3077,14 @@ class TB{constructor(r,c){this.r=r;this.c=c;this.t=c;this.l=Date.now()}allow(){c
 Menu, Order, OrderItem, KitchenQueue, Bill, Table.
 
 ```javascript
-class Logger{constructor(a){this.a=a}log(l,m){this.a.forEach(x=>x.write(l,m))}}
+class Logger {
+  constructor(a) {
+    this.a = a;
+  }
+  log(l, m) {
+    this.a.forEach((x) => x.write(l, m));
+  }
+}
 ```
 
 ### Q339. Design Food Delivery (LLD)?
@@ -2518,7 +3094,17 @@ class Logger{constructor(a){this.a=a}log(l,m){this.a.forEach(x=>x.write(l,m))}}
 Customer, Restaurant, Order, DeliveryAgent, Tracker, Rating.
 
 ```javascript
-class Short{constructor(){this.m=new Map();this.n=1}shorten(u){const c=(this.n++).toString(36);this.m.set(c,u);return c}}
+class Short {
+  constructor() {
+    this.m = new Map();
+    this.n = 1;
+  }
+  shorten(u) {
+    const c = (this.n++).toString(36);
+    this.m.set(c, u);
+    return c;
+  }
+}
 ```
 
 ### Q340. Design Splitwise?
@@ -2528,7 +3114,17 @@ class Short{constructor(){this.m=new Map();this.n=1}shorten(u){const c=(this.n++
 User, Group, Expense, Split (equal/exact/%), BalanceSheet.
 
 ```javascript
-class Broker{constructor(){this.t=new Map()}sub(topic,cb){(this.t.get(topic)??this.t.set(topic,[]).get(topic)).push(cb)}pub(topic,m){(this.t.get(topic)||[]).forEach(cb=>cb(m))}}
+class Broker {
+  constructor() {
+    this.t = new Map();
+  }
+  sub(topic, cb) {
+    (this.t.get(topic) ?? this.t.set(topic, []).get(topic)).push(cb);
+  }
+  pub(topic, m) {
+    (this.t.get(topic) || []).forEach((cb) => cb(m));
+  }
+}
 ```
 
 ### Q341. Splitwise balance?
@@ -2538,7 +3134,17 @@ class Broker{constructor(){this.t=new Map()}sub(topic,cb){(this.t.get(topic)??th
 Minimize transactions via debt simplification graph.
 
 ```javascript
-class KV{constructor(){this.s=new Map()}set(k,v){this.s.set(k,v)}get(k){return this.s.get(k)??null}}
+class KV {
+  constructor() {
+    this.s = new Map();
+  }
+  set(k, v) {
+    this.s.set(k, v);
+  }
+  get(k) {
+    return this.s.get(k) ?? null;
+  }
+}
 ```
 
 ### Q342. Design Stack Overflow (LLD)?
@@ -2567,11 +3173,15 @@ HashMap + Doubly Linked List for O(1) get/put.
 
 ```javascript
 class LRUCache {
-  constructor(cap) { this.cap = cap; this.map = new Map(); }
+  constructor(cap) {
+    this.cap = cap;
+    this.map = new Map();
+  }
   get(key) {
     if (!this.map.has(key)) return -1;
     const v = this.map.get(key);
-    this.map.delete(key); this.map.set(key, v);
+    this.map.delete(key);
+    this.map.set(key, v);
     return v;
   }
   put(key, val) {
@@ -2593,12 +3203,23 @@ Token bucket or sliding window.
 
 ```javascript
 class TokenBucket {
-  constructor(rate, cap) { this.rate=rate; this.cap=cap; this.tokens=cap; this.last=Date.now(); }
+  constructor(rate, cap) {
+    this.rate = rate;
+    this.cap = cap;
+    this.tokens = cap;
+    this.last = Date.now();
+  }
   allow() {
     const now = Date.now();
-    this.tokens = Math.min(this.cap, this.tokens + (now-this.last)/1000*this.rate);
+    this.tokens = Math.min(
+      this.cap,
+      this.tokens + ((now - this.last) / 1000) * this.rate,
+    );
     this.last = now;
-    if (this.tokens >= 1) { this.tokens--; return true; }
+    if (this.tokens >= 1) {
+      this.tokens--;
+      return true;
+    }
     return false;
   }
 }
@@ -2611,7 +3232,16 @@ class TokenBucket {
 Logger, Appender (File/Console), Formatter, LogLevel, singleton or DI.
 
 ```javascript
-class MinStack{constructor(){this.s=[];this.m=[]}push(v){this.s.push(v);this.m.push(Math.min(this.m.at(-1)??v,v))}}
+class MinStack {
+  constructor() {
+    this.s = [];
+    this.m = [];
+  }
+  push(v) {
+    this.s.push(v);
+    this.m.push(Math.min(this.m.at(-1) ?? v, v));
+  }
+}
 ```
 
 ### Q348. Design Task Scheduler?
@@ -2621,7 +3251,18 @@ class MinStack{constructor(){this.s=[];this.m=[]}push(v){this.s.push(v);this.m.p
 Task, PriorityQueue, Worker, Cron expression parser.
 
 ```javascript
-class CmdMgr{constructor(){this.u=[]}run(c){c.exec();this.u.push(c)}undo(){this.u.pop()?.undo()}}
+class CmdMgr {
+  constructor() {
+    this.u = [];
+  }
+  run(c) {
+    c.exec();
+    this.u.push(c);
+  }
+  undo() {
+    this.u.pop()?.undo();
+  }
+}
 ```
 
 ### Q349. Design URL Shortener (LLD)?
@@ -2637,7 +3278,17 @@ UrlMap, Base62Encoder, Counter/Hash, RedirectService, Analytics.
 Topic, Publisher, Subscriber, Message, Broker, Subscription.
 
 ```javascript
-class Wallet{constructor(){this.b=0;this.t=[]}credit(a,k){if(this.t.find(x=>x.k===k))return;this.b+=a;this.t.push({a,k})}}
+class Wallet {
+  constructor() {
+    this.b = 0;
+    this.t = [];
+  }
+  credit(a, k) {
+    if (this.t.find((x) => x.k === k)) return;
+    this.b += a;
+    this.t.push({ a, k });
+  }
+}
 ```
 
 ### Q351. Design Key-Value Store (LLD)?
@@ -2665,7 +3316,24 @@ User, Meeting, Room, Calendar, ConflictDetector.
 Vehicle, Reservation, Customer, Pricing, Availability.
 
 ```javascript
-class CB{constructor(t=5){this.f=0;this.t=t;this.s='CLOSED'}call(fn){if(this.s==='OPEN')throw Error();try{const r=fn();this.f=0;return r}catch(e){if(++this.f>=this.t)this.s='OPEN';throw e}}}
+class CB {
+  constructor(t = 5) {
+    this.f = 0;
+    this.t = t;
+    this.s = "CLOSED";
+  }
+  call(fn) {
+    if (this.s === "OPEN") throw Error();
+    try {
+      const r = fn();
+      this.f = 0;
+      return r;
+    } catch (e) {
+      if (++this.f >= this.t) this.s = "OPEN";
+      throw e;
+    }
+  }
+}
 ```
 
 ### Q355. Design Course Registration?
@@ -2951,7 +3619,15 @@ Card, balance, partial redemption, expiry.
 Heap-based priority queue.
 
 ```javascript
-class Mutex{constructor(){this.c=Promise.resolve()}run(fn){this.c=this.c.then(fn);return this.c}}
+class Mutex {
+  constructor() {
+    this.c = Promise.resolve();
+  }
+  run(fn) {
+    this.c = this.c.then(fn);
+    return this.c;
+  }
+}
 ```
 
 ### Q402. Design Barcode/QR ticket?
@@ -3089,8 +3765,8 @@ Microtasks (promises) before macrotasks (setTimeout).
 
 **Answer:**
 ```javascript
-const { Worker } = require('worker_threads');
-new Worker('./task.js');
+const { Worker } = require("worker_threads");
+new Worker("./task.js");
 ```
 
 ### Q424. Optimistic vs pessimistic locking?
@@ -3202,7 +3878,9 @@ Represents async result.
 Use async-mutex npm or queue serial execution.
 
 ```javascript
-function errHandler(e,req,res,n){res.status(e.status||500).json({error:e.message})}
+function errHandler(e, req, res, n) {
+  res.status(e.status || 500).json({ error: e.message });
+}
 ```
 
 ### Q442. Concurrent LRU?
@@ -3212,7 +3890,8 @@ function errHandler(e,req,res,n){res.status(e.status||500).json({error:e.message
 Per-segment locks or single lock — trade throughput.
 
 ```javascript
-app.use('/api/v1',v1Router); app.use('/api/v2',v2Router)
+app.use("/api/v1", v1Router);
+app.use("/api/v2", v2Router);
 ```
 
 ### Q443. Double-checked locking?
@@ -3222,7 +3901,13 @@ app.use('/api/v1',v1Router); app.use('/api/v2',v2Router)
 Lazy init with reduced locking. Careful with memory ordering.
 
 ```javascript
-function validate(s){return(req,res,n)=>{const{error}=s.validate(req.body);if(error)return res.status(400).json({error:error.message});n()}}
+function validate(s) {
+  return (req, res, n) => {
+    const { error } = s.validate(req.body);
+    if (error) return res.status(400).json({ error: error.message });
+    n();
+  };
+}
 ```
 
 ### Q444. Thread-local storage?
@@ -3232,7 +3917,11 @@ function validate(s){return(req,res,n)=>{const{error}=s.validate(req.body);if(er
 Per-thread data copy.
 
 ```javascript
-const ok=d=>({success:true,data:d}); const fail=(c,m)=>({success:false,error:{code:c,message:m}})
+const ok = (d) => ({ success: true, data: d });
+const fail = (c, m) => ({
+  success: false,
+  error: { code: c, message: m },
+});
 ```
 
 ### Q445. Green threads vs OS threads?
@@ -3242,7 +3931,11 @@ const ok=d=>({success:true,data:d}); const fail=(c,m)=>({success:false,error:{co
 Green: user-space scheduled (goroutines). OS: kernel scheduled.
 
 ```javascript
-class RBAC{has(u,p){return(this.roles[u.role]||[]).includes(p)}}
+class RBAC {
+  has(u, p) {
+    return (this.roles[u.role] || []).includes(p);
+  }
+}
 ```
 
 ### Q446. Actor model?
@@ -3406,7 +4099,18 @@ Schema validate body/params (Zod/Joi).
 Consistent `{ data, meta, errors }` envelope.
 
 ```javascript
-class OrderSvc{constructor(r,p,n){this.r=r;this.p=p;this.n=n}place(o){this.r.save(o);this.p.charge(o.total);this.n.send(o.uid)}}
+class OrderSvc {
+  constructor(r, p, n) {
+    this.r = r;
+    this.p = p;
+    this.n = n;
+  }
+  place(o) {
+    this.r.save(o);
+    this.p.charge(o.total);
+    this.n.send(o.uid);
+  }
+}
 ```
 
 ### Q472. Content negotiation?
@@ -3416,7 +4120,12 @@ class OrderSvc{constructor(r,p,n){this.r=r;this.p=p;this.n=n}place(o){this.r.sav
 Accept header for JSON vs XML.
 
 ```javascript
-class OrderPlaced{constructor(id){this.id=id}} eventBus.pub(new OrderPlaced(1))
+class OrderPlaced {
+  constructor(id) {
+    this.id = id;
+  }
+}
+eventBus.pub(new OrderPlaced(1));
 ```
 
 ### Q473. Webhook design?
@@ -3426,7 +4135,12 @@ class OrderPlaced{constructor(id){this.id=id}} eventBus.pub(new OrderPlaced(1))
 Signed payload, retry with backoff, idempotency.
 
 ```javascript
-class CmdSvc{create(){}} class QrySvc{get(){}}
+class CmdSvc {
+  create() {}
+}
+class QrySvc {
+  get() {}
+}
 ```
 
 ### Q474. OpenAPI/Swagger role?
@@ -3436,7 +4150,14 @@ class CmdSvc{create(){}} class QrySvc{get(){}}
 Contract documentation and client generation.
 
 ```javascript
-class ES{append(id,e){this.e.push({id,e})}rebuild(id){return this.e.filter(x=>x.id===id)}}
+class ES {
+  append(id, e) {
+    this.e.push({ id, e });
+  }
+  rebuild(id) {
+    return this.e.filter((x) => x.id === id);
+  }
+}
 ```
 
 ### Q475. API backward compatibility?
@@ -3446,7 +4167,12 @@ class ES{append(id,e){this.e.push({id,e})}rebuild(id){return this.e.filter(x=>x.
 Additive changes only; deprecate old fields.
 
 ```javascript
-async function save(o,db){await db.tx(async t=>{await t.insert('orders',o);await t.insert('outbox',{type:'Created',o})})}
+async function save(o, db) {
+  await db.tx(async (t) => {
+    await t.insert("orders", o);
+    await t.insert("outbox", { type: "Created", o });
+  });
+}
 ```
 
 ### Q476. Bulk operations API?
