@@ -1,7 +1,8 @@
 # Low Level Design (LLD) Interview Questions & Answers
 
 > **500 Most Asked LLD Interview Questions** — Basic to Advanced  
-> Format: Question → Answer | **103 JavaScript code snippets**
+> Format: Question → Answer | **103+ code snippets**  
+> **Multi-language examples:** Concepts not natively available in JavaScript (interfaces, abstract classes, method overloading, enums, generics, etc.) include a **JavaScript workaround**, native **TypeScript**, and **Python** example.
 
 ---
 
@@ -21,6 +22,23 @@
 | 10 | Advanced LLD Topics | Q471–Q510 |
 
 **Total: 510 Questions** | Levels: Basic → Intermediate → Advanced
+
+### Multi-Language Code Examples (JS · TS · Python)
+
+| Question | Concept | JS | TS | Python |
+|----------|---------|:--:|:--:|:------:|
+| Q9 | Method overloading | workaround | native | `@overload` |
+| Q11 | Interface | duck typing | `interface` | `Protocol` |
+| Q12 | Abstract class | throw in base | `abstract class` | `ABC` |
+| Q23 | Duck typing | native | structural typing | native |
+| Q67 | Interface Segregation | mixin objects | split interfaces | split Protocols |
+| Q106 | DIP without interfaces | duck typing | `interface` | `Protocol` |
+| Q107 | OCP payment providers | duck typing | `interface` | `Protocol` |
+| Q114 | Factory Method (abstract) | throw in base | `abstract` method | `ABC` |
+| Q148 | Factory returns interface | duck typing | return type | `Protocol` |
+| Q293 | Class visibility (`protected`) | `#` only | `protected` | `_` convention |
+| Q318 | Enum (`Direction`) | frozen object | `enum` | `Enum` |
+| Q497 | Generic repository | no generics | `<T>` | `TypeVar` |
 
 ---
 
@@ -176,12 +194,47 @@ class Circle extends Shape {
 **Level:** Basic
 
 **Answer:**
-Use default/variadic parameters; no true overloading.
+JavaScript has **no true method overloading** — use default parameters, rest args, or runtime type checks. **TypeScript** supports compile-time overload signatures. **Python** uses `@overload` for type hints with a single implementation.
 
+**JavaScript** (workaround):
 ```javascript
-function createUser(name, role = "user") {
-  return { name, role };
+function createUser(name, email = null, role = "user") {
+  return { name, email, role };
 }
+
+// Single function handles all call patterns
+createUser("Alice");
+createUser("Bob", "bob@example.com");
+createUser("Carol", "carol@example.com", "admin");
+```
+
+**TypeScript** (native overloads):
+```typescript
+interface User {
+  name: string;
+  email: string | null;
+  role: string;
+}
+
+function createUser(name: string): User;
+function createUser(name: string, email: string): User;
+function createUser(name: string, email?: string, role = "user"): User {
+  return { name, email: email ?? null, role };
+}
+```
+
+**Python**:
+```python
+from typing import overload
+
+@overload
+def create_user(name: str) -> dict: ...
+
+@overload
+def create_user(name: str, email: str, role: str = "user") -> dict: ...
+
+def create_user(name, email=None, role="user"):
+    return {"name": name, "email": email, "role": role}
 ```
 
 ### Q10. Composition over inheritance?
@@ -207,33 +260,110 @@ class Duck {
 **Level:** Basic
 
 **Answer:**
-Contract without implementation. JS: duck typing.
+A **contract without implementation** — defines *what* a type must do, not *how*. JavaScript has no `interface` keyword; it relies on **duck typing**. **TypeScript** and **Python** (`Protocol` / `ABC`) provide explicit contracts.
 
+**JavaScript** (duck typing):
 ```javascript
-class Logger {
-  log(m) {
-    console.log(m);
+// No interface keyword — any object with a log() method works
+class ConsoleLogger {
+  log(message) {
+    console.log(message);
   }
 }
+
+class FileLogger {
+  log(message) {
+    // write to file
+  }
+}
+
+function audit(logger, event) {
+  logger.log(event); // works if shape matches
+}
+```
+
+**TypeScript** (native interface):
+```typescript
+interface Logger {
+  log(message: string): void;
+}
+
+class ConsoleLogger implements Logger {
+  log(message: string): void {
+    console.log(message);
+  }
+}
+
+function audit(logger: Logger, event: string): void {
+  logger.log(event);
+}
+```
+
+**Python** (Protocol — structural typing):
+```python
+from typing import Protocol
+
+class Logger(Protocol):
+    def log(self, message: str) -> None: ...
+
+class ConsoleLogger:
+    def log(self, message: str) -> None:
+        print(message)
+
+def audit(logger: Logger, event: str) -> None:
+    logger.log(event)
 ```
 
 ### Q12. Abstract class?
 **Level:** Intermediate
 
 **Answer:**
-Cannot instantiate; subclasses implement abstract methods.
+Cannot be instantiated directly; subclasses **must** implement abstract methods. JavaScript has no `abstract` keyword — simulate by throwing in base methods. **TypeScript** has `abstract class`. **Python** uses `abc.ABC`.
 
+**JavaScript** (simulated):
 ```javascript
-class P {
+class Processor {
   run() {
-    throw Error();
+    throw new Error("Subclass must implement run()");
   }
 }
-class IP extends P {
+
+class ImageProcessor extends Processor {
   run() {
-    return "ok";
+    return "processing image";
   }
 }
+
+// new Processor();  // would throw at runtime if run() called
+new ImageProcessor().run(); // "processing image"
+```
+
+**TypeScript** (native):
+```typescript
+abstract class Processor {
+  abstract run(): string;
+}
+
+class ImageProcessor extends Processor {
+  run(): string {
+    return "processing image";
+  }
+}
+
+// const p = new Processor(); // compile error
+```
+
+**Python** (ABC):
+```python
+from abc import ABC, abstractmethod
+
+class Processor(ABC):
+    @abstractmethod
+    def run(self) -> str: ...
+
+class ImageProcessor(Processor):
+    def run(self) -> str:
+        return "processing image"
 ```
 
 ### Q13. Coupling?
@@ -383,7 +513,63 @@ class T {
 **Level:** Basic
 
 **Answer:**
-Type determined by behavior.
+*"If it walks like a duck and quacks like a duck, it's a duck."* Type is determined by **behavior/shape**, not explicit inheritance. Native in **JavaScript** and **Python**. **TypeScript** uses **structural typing** — compatible if the shape matches, even without `implements`.
+
+**JavaScript**:
+```javascript
+class Dog {
+  speak() {
+    return "woof";
+  }
+}
+
+class Robot {
+  speak() {
+    return "beep";
+  }
+}
+
+function announce(entity) {
+  return entity.speak(); // no shared class or interface needed
+}
+
+announce(new Dog());   // "woof"
+announce(new Robot()); // "beep"
+```
+
+**TypeScript** (structural typing):
+```typescript
+interface Speaker {
+  speak(): string;
+}
+
+function announce(entity: Speaker): string {
+  return entity.speak();
+}
+
+// Dog/Robot need NOT declare "implements Speaker"
+// — shape match is enough at compile time
+class Dog {
+  speak() { return "woof"; }
+}
+```
+
+**Python**:
+```python
+class Dog:
+    def speak(self):
+        return "woof"
+
+class Robot:
+    def speak(self):
+        return "beep"
+
+def announce(entity):
+    return entity.speak()  # duck typing — behavior matters, not type name
+
+announce(Dog())    # "woof"
+announce(Robot())  # "beep"
+```
 
 ### Q24. Mixin?
 **Level:** Intermediate
@@ -777,17 +963,63 @@ Penguin extends Bird but can't fly.
 **Level:** Intermediate
 
 **Answer:**
-No fat interfaces; split by client needs.
+No **fat interfaces** — split into small, client-specific contracts. JavaScript uses separate mixin objects; **TypeScript** splits `interface`s; **Python** splits `Protocol`s.
 
+**JavaScript** (small focused shapes):
 ```javascript
-class Workable {
-  work() {}
-}
+const canWork = { work() { return "working"; } };
+const canEat = { eat() { return "eating"; } };
+
 class Human {
-  work() {
-    return "working";
+  constructor() {
+    Object.assign(this, canWork, canEat);
   }
 }
+
+class Robot {
+  constructor() {
+    Object.assign(this, canWork); // robots don't need canEat
+  }
+}
+```
+
+**TypeScript** (segregated interfaces):
+```typescript
+interface Workable {
+  work(): void;
+}
+
+interface Eatable {
+  eat(): void;
+}
+
+class Human implements Workable, Eatable {
+  work() { console.log("working"); }
+  eat() { console.log("eating"); }
+}
+
+class Robot implements Workable {
+  work() { console.log("working"); }
+  // no eat() — not forced by a fat interface
+}
+```
+
+**Python** (segregated Protocols):
+```python
+from typing import Protocol
+
+class Workable(Protocol):
+    def work(self) -> None: ...
+
+class Eatable(Protocol):
+    def eat(self) -> None: ...
+
+class Human:
+    def work(self) -> None: print("working")
+    def eat(self) -> None: print("eating")
+
+class Robot:
+    def work(self) -> None: print("working")
 ```
 
 ### Q68. Dependency Inversion Principle?
@@ -1077,13 +1309,141 @@ Subtype shouldn't add unexpected throws.
 **Level:** Intermediate
 
 **Answer:**
-Duck typing in JS.
+In JavaScript, **duck typing** replaces explicit interfaces for Dependency Inversion — depend on objects that expose the required methods. **TypeScript** formalizes this with interfaces. **Python** uses `Protocol` or `ABC`.
+
+**JavaScript** (duck typing):
+```javascript
+class EmailSender {
+  send(to, body) {
+    console.log(`Email to ${to}: ${body}`);
+  }
+}
+
+class NotificationService {
+  constructor(sender) {
+    this.sender = sender; // any object with send() works
+  }
+  notify(user, message) {
+    this.sender.send(user.email, message);
+  }
+}
+
+new NotificationService(new EmailSender()).notify(
+  { email: "a@b.com" },
+  "Hello"
+);
+```
+
+**TypeScript** (interface):
+```typescript
+interface MessageSender {
+  send(to: string, body: string): void;
+}
+
+class EmailSender implements MessageSender {
+  send(to: string, body: string): void {
+    console.log(`Email to ${to}: ${body}`);
+  }
+}
+
+class NotificationService {
+  constructor(private sender: MessageSender) {}
+  notify(user: { email: string }, message: string): void {
+    this.sender.send(user.email, message);
+  }
+}
+```
+
+**Python** (Protocol):
+```python
+from typing import Protocol
+
+class MessageSender(Protocol):
+    def send(self, to: str, body: str) -> None: ...
+
+class EmailSender:
+    def send(self, to: str, body: str) -> None:
+        print(f"Email to {to}: {body}")
+
+class NotificationService:
+    def __init__(self, sender: MessageSender):
+        self.sender = sender
+
+    def notify(self, user: dict, message: str) -> None:
+        self.sender.send(user["email"], message)
+```
 
 ### Q107. OCP payment providers?
 **Level:** Intermediate
 
 **Answer:**
-PaymentProvider interface.
+Open for extension, closed for modification — add new payment providers without changing existing code. Use a **PaymentProvider** contract. JavaScript relies on duck typing; **TypeScript** uses `interface`; **Python** uses `Protocol`/`ABC`.
+
+**JavaScript**:
+```javascript
+class StripeProvider {
+  pay(amount) {
+    return `Stripe charged $${amount}`;
+  }
+}
+
+class PayPalProvider {
+  pay(amount) {
+    return `PayPal charged $${amount}`;
+  }
+}
+
+class Checkout {
+  constructor(provider) {
+    this.provider = provider;
+  }
+  process(amount) {
+    return this.provider.pay(amount);
+  }
+}
+
+// Add new provider — no change to Checkout
+new Checkout(new StripeProvider()).process(100);
+```
+
+**TypeScript**:
+```typescript
+interface PaymentProvider {
+  pay(amount: number): string;
+}
+
+class StripeProvider implements PaymentProvider {
+  pay(amount: number): string {
+    return `Stripe charged $${amount}`;
+  }
+}
+
+class Checkout {
+  constructor(private provider: PaymentProvider) {}
+  process(amount: number): string {
+    return this.provider.pay(amount);
+  }
+}
+```
+
+**Python**:
+```python
+from typing import Protocol
+
+class PaymentProvider(Protocol):
+    def pay(self, amount: float) -> str: ...
+
+class StripeProvider:
+    def pay(self, amount: float) -> str:
+        return f"Stripe charged ${amount}"
+
+class Checkout:
+    def __init__(self, provider: PaymentProvider):
+        self.provider = provider
+
+    def process(self, amount: float) -> str:
+        return self.provider.pay(amount)
+```
 
 ### Q108. SOLID trade-offs?
 **Level:** Intermediate
@@ -1138,19 +1498,57 @@ Global state, hard to test.
 **Level:** Intermediate
 
 **Answer:**
-Subclass decides instantiated type.
+Subclass decides which concrete type to instantiate. The base **abstract method** pattern is simulated in JavaScript; native in **TypeScript** and **Python**.
 
+**JavaScript** (throw as abstract):
 ```javascript
 class Dialog {
-  createBtn() {
-    throw Error();
+  createButton() {
+    throw new Error("Subclass must implement createButton()");
+  }
+  render() {
+    const btn = this.createButton();
+    return btn.render();
   }
 }
-class Web extends Dialog {
-  createBtn() {
-    return { render: () => "btn" };
+
+class WebDialog extends Dialog {
+  createButton() {
+    return { render: () => "<button>OK</button>" };
   }
 }
+```
+
+**TypeScript** (abstract method):
+```typescript
+abstract class Dialog {
+  abstract createButton(): { render(): string };
+  render(): string {
+    return this.createButton().render();
+  }
+}
+
+class WebDialog extends Dialog {
+  createButton() {
+    return { render: () => "<button>OK</button>" };
+  }
+}
+```
+
+**Python** (ABC):
+```python
+from abc import ABC, abstractmethod
+
+class Dialog(ABC):
+    @abstractmethod
+    def create_button(self) -> dict: ...
+
+    def render(self) -> str:
+        return self.create_button()["render"]()
+
+class WebDialog(Dialog):
+    def create_button(self) -> dict:
+        return {"render": lambda: "<button>OK</button>"}
 ```
 
 ### Q115. Simple Factory?
@@ -1462,7 +1860,55 @@ Freeze object in `build()`.
 **Level:** Intermediate
 
 **Answer:**
-Hide concrete implementation.
+Factory hides concrete class — callers depend on a **contract**, not implementation. JavaScript uses duck typing; **TypeScript** returns an `interface` type; **Python** returns a `Protocol` type.
+
+**JavaScript**:
+```javascript
+function createNotifier(type) {
+  const types = {
+    email: () => ({ send(msg) { console.log(`Email: ${msg}`); } }),
+    sms: () => ({ send(msg) { console.log(`SMS: ${msg}`); } }),
+  };
+  return types[type](); // caller only needs .send()
+}
+
+const notifier = createNotifier("email");
+notifier.send("Order shipped");
+```
+
+**TypeScript**:
+```typescript
+interface Notifier {
+  send(message: string): void;
+}
+
+function createNotifier(type: "email" | "sms"): Notifier {
+  const types: Record<string, () => Notifier> = {
+    email: () => ({ send: (msg) => console.log(`Email: ${msg}`) }),
+    sms: () => ({ send: (msg) => console.log(`SMS: ${msg}`) }),
+  };
+  return types[type]();
+}
+```
+
+**Python**:
+```python
+from typing import Protocol
+
+class Notifier(Protocol):
+    def send(self, message: str) -> None: ...
+
+class EmailNotifier:
+    def send(self, message: str) -> None:
+        print(f"Email: {message}")
+
+class SmsNotifier:
+    def send(self, message: str) -> None:
+        print(f"SMS: {message}")
+
+def create_notifier(type_: str) -> Notifier:
+    return {"email": EmailNotifier, "sms": SmsNotifier}[type_]()
+```
 
 ### Q149. Creational in React?
 **Level:** Intermediate
@@ -2620,19 +3066,64 @@ Black dot = initial. Bullseye = final.
 **Level:** Basic
 
 **Answer:**
-+ public, - private, # protected.
+UML: `+` public, `-` private, `#` protected. JavaScript only has `#` private fields (no `protected`). **TypeScript** adds `public`/`private`/`protected` (compile-time). **Python** uses naming conventions (`_`, `__`).
+
+**JavaScript** (`#` private only):
+```javascript
+class BankAccount {
+  #balance = 0; // truly private field
+
+  deposit(amount) {
+    this.#balance += amount;
+  }
+
+  getBalance() {
+    return this.#balance;
+  }
+}
+```
+
+**TypeScript** (public / private / protected):
+```typescript
+class BankAccount {
+  public accountId: string;
+  protected balance: number = 0; // visible to subclasses
+  private pin: string;
+
+  constructor(id: string, pin: string) {
+    this.accountId = id;
+    this.pin = pin;
+  }
+
+  deposit(amount: number): void {
+    this.balance += amount;
+  }
+}
+```
+
+**Python** (convention-based):
+```python
+class BankAccount:
+    def __init__(self, account_id: str, pin: str):
+        self.account_id = account_id   # public
+        self._balance = 0              # protected (convention)
+        self.__pin = pin               # name-mangled private
+
+    def deposit(self, amount: float) -> None:
+        self._balance += amount
+```
 
 ### Q294. Interface in UML?
 **Level:** Basic
 
 **Answer:**
-<<interface>> stereotype.
+`<<interface>>` stereotype — contract with method signatures, no implementation. See **Q11** for JavaScript (duck typing), TypeScript (`interface`), and Python (`Protocol`) examples.
 
 ### Q295. Abstract class notation?
 **Level:** Basic
 
 **Answer:**
-Italic name or {abstract}.
+Italic name or `{abstract}` in UML. See **Q12** for JavaScript (simulated), TypeScript (`abstract class`), and Python (`ABC`) examples.
 
 ### Q296. Navigability?
 **Level:** Intermediate
@@ -2813,19 +3304,70 @@ class ParkingLot {
 **Level:** Intermediate
 
 **Answer:**
-Elevator, Floor, Request, Controller, Direction enum, scheduling algorithm.
+Elevator, Floor, Request, Controller, **Direction enum**, scheduling algorithm. JavaScript has no native `enum` — use frozen objects. **TypeScript** and **Python** have native enums.
 
+**JavaScript** (const object):
 ```javascript
+const Direction = Object.freeze({
+  UP: "UP",
+  DOWN: "DOWN",
+  IDLE: "IDLE",
+});
+
 class Elevator {
   constructor(id) {
     this.id = id;
     this.floor = 0;
-    this.req = [];
+    this.direction = Direction.IDLE;
+    this.requests = [];
   }
-  add(f) {
-    this.req.push(f);
+
+  addRequest(floor, direction) {
+    this.requests.push({ floor, direction });
   }
 }
+```
+
+**TypeScript** (native enum):
+```typescript
+enum Direction {
+  UP = "UP",
+  DOWN = "DOWN",
+  IDLE = "IDLE",
+}
+
+class Elevator {
+  constructor(
+    public id: number,
+    public floor = 0,
+    public direction: Direction = Direction.IDLE,
+    public requests: { floor: number; direction: Direction }[] = []
+  ) {}
+
+  addRequest(floor: number, direction: Direction): void {
+    this.requests.push({ floor, direction });
+  }
+}
+```
+
+**Python** (Enum):
+```python
+from enum import Enum
+
+class Direction(Enum):
+    UP = "UP"
+    DOWN = "DOWN"
+    IDLE = "IDLE"
+
+class Elevator:
+    def __init__(self, elevator_id: int):
+        self.id = elevator_id
+        self.floor = 0
+        self.direction = Direction.IDLE
+        self.requests: list[dict] = []
+
+    def add_request(self, floor: int, direction: Direction) -> None:
+        self.requests.append({"floor": floor, "direction": direction})
 ```
 
 ### Q319. Elevator scheduling?
@@ -4309,7 +4851,66 @@ Runtime class inspection — use sparingly; breaks types.
 **Level:** Advanced
 
 **Answer:**
-Convenient but leaks persistence to domain.
+A generic `Repository<T>` is convenient but can leak persistence into the domain. JavaScript has **no generics** — use conventions or JSDoc. **TypeScript** and **Python** support type-parameterized repositories.
+
+**JavaScript** (no generics — duck typing):
+```javascript
+class UserRepository {
+  constructor(store) {
+    this.store = store;
+  }
+
+  async findById(id) {
+    return this.store.get("users", id);
+  }
+
+  async save(user) {
+    return this.store.put("users", user.id, user);
+  }
+}
+```
+
+**TypeScript** (generic repository):
+```typescript
+interface Repository<T, ID = string> {
+  findById(id: ID): Promise<T | null>;
+  save(entity: T): Promise<T>;
+}
+
+class UserRepository implements Repository<User> {
+  constructor(private store: DataStore) {}
+
+  async findById(id: string): Promise<User | null> {
+    return this.store.get<User>("users", id);
+  }
+
+  async save(user: User): Promise<User> {
+    return this.store.put("users", user.id, user);
+  }
+}
+```
+
+**Python** (Generic):
+```python
+from typing import Generic, TypeVar, Protocol
+
+T = TypeVar("T")
+ID = TypeVar("ID")
+
+class Repository(Protocol, Generic[T, ID]):
+    def find_by_id(self, id: ID) -> T | None: ...
+    def save(self, entity: T) -> T: ...
+
+class UserRepository:
+    def __init__(self, store):
+        self.store = store
+
+    def find_by_id(self, id: str) -> dict | None:
+        return self.store.get("users", id)
+
+    def save(self, user: dict) -> dict:
+        return self.store.put("users", user["id"], user)
+```
 
 ### Q498. Rich domain model benefits?
 **Level:** Advanced
