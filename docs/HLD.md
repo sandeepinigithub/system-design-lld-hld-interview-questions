@@ -1,7 +1,7 @@
 # High Level Design (HLD) Interview Questions & Answers
 
 > **500 Most Asked HLD Interview Questions** — Basic to Advanced  
-> Format: Question → Answer | JavaScript snippets where applicable
+> Format: Question → Answer | **47 JavaScript code snippets**
 
 ---
 
@@ -30,6 +30,10 @@
 
 **Answer:**
 HLD defines **system architecture** — components, data flow, APIs, storage, scaling — without implementation details.
+
+```javascript
+const arch={client:'App',gateway:'GW',services:['User','Order'],db:'PG',cache:'Redis'}
+```
 
 ### Q2. HLD vs LLD?
 **Level:** Basic
@@ -67,17 +71,29 @@ Quick math: QPS, storage, bandwidth from DAU and usage patterns.
 **Answer:**
 QPS = DAU × actions_per_user / 86400. Peak ≈ 2-3× average.
 
+```javascript
+const qps=(10_000_000*5)/86400; const peak=qps*3
+```
+
 ### Q8. Storage estimation?
 **Level:** Basic
 
 **Answer:**
 Daily data × retention period × replication factor.
 
+```javascript
+const tb=(500_000_000*300*365*5*3)/(1024**4)
+```
+
 ### Q9. Bandwidth estimation?
 **Level:** Basic
 
 **Answer:**
 Request size × QPS for ingress/egress.
+
+```javascript
+const mbps=(50*1024*10000*8)/(1024*1024)
+```
 
 ### Q10. Latency requirements?
 **Level:** Basic
@@ -91,6 +107,10 @@ User-facing: <200ms read, <500ms write typical targets.
 **Answer:**
 8.76 hours downtime/year. 99.99% = 52.6 min/year.
 
+```javascript
+const down=(100-99.9)/100*8760
+```
+
 ### Q12. Scalability?
 **Level:** Basic
 
@@ -102,6 +122,10 @@ System handles growth by adding resources.
 
 **Answer:**
 Vertical: bigger machine. Horizontal: more machines (preferred).
+
+```javascript
+class Cluster{constructor(){this.i=[]}add(x){this.i.push(x)}}
+```
 
 ### Q14. Reliability?
 **Level:** Basic
@@ -259,6 +283,10 @@ Reduce features under load instead of full failure.
 **Answer:**
 Many clients retry simultaneously. Fix: jitter, backoff.
 
+```javascript
+const delay=1000*2**i+Math.random()*1000
+```
+
 ### Q40. Hot spot problem?
 **Level:** Advanced
 
@@ -336,6 +364,10 @@ Roll out to small % traffic first.
 
 **Answer:**
 Two identical envs; switch traffic atomically.
+
+```javascript
+const routes={'GET /users':'list','POST /users':'create'}
+```
 
 ---
 
@@ -641,6 +673,10 @@ CDN, rate limiting, WAF, scrubbing centers.
 **Answer:**
 Web Application Firewall — blocks malicious HTTP.
 
+```javascript
+const idx=new Map(users.map(u=>[u.email,u]))
+```
+
 ---
 
 ## 3. Databases & Storage
@@ -651,11 +687,19 @@ Web Application Firewall — blocks malicious HTTP.
 **Answer:**
 SQL: structured, ACID, relations. NoSQL: flexible schema, scale-out.
 
+```javascript
+const shard=id=>String(id).split('').reduce((h,c)=>h+c.charCodeAt(0),0)%4
+```
+
 ### Q104. ACID properties?
 **Level:** Basic
 
 **Answer:**
 Atomicity, Consistency, Isolation, Durability.
+
+```javascript
+class Router{write(s,p){return primary.query(s,p)}read(s,p){return replica.query(s,p)}}
+```
 
 ### Q105. BASE properties?
 **Level:** Intermediate
@@ -945,11 +989,19 @@ Read uncommitted, read committed, repeatable read, serializable.
 **Answer:**
 Cycle of lock waits. DB detects and aborts one.
 
+```javascript
+class LRU{constructor(c){this.c=c;this.m=new Map()}get(k){}put(k,v){}}
+```
+
 ### Q153. Optimistic locking DB?
 **Level:** Intermediate
 
 **Answer:**
 Version column — update fails if version changed.
+
+```javascript
+async function getUser(id){const c=await redis.get(`user:${id}`);if(c)return JSON.parse(c);const u=await db.find(id);await redis.setex(`user:${id}`,3600,JSON.stringify(u));return u}
+```
 
 ---
 
@@ -972,6 +1024,10 @@ Hit: data in cache. Miss: fetch from origin.
 
 **Answer:**
 LRU, LFU, FIFO, TTL, random.
+
+```javascript
+async function upd(id,d){await db.update(id,d);await cache.del(`user:${id}`)}
+```
 
 ### Q157. TTL?
 **Level:** Basic
@@ -1279,6 +1335,10 @@ Strong consistency required, data changes constantly, low read ratio.
 **Answer:**
 Distribute traffic across multiple servers.
 
+```javascript
+class RR{constructor(s){this.s=s;this.i=0}next(){return this.s[this.i++%this.s.length]}}
+```
+
 ### Q206. Round robin?
 **Level:** Basic
 
@@ -1291,11 +1351,19 @@ Sequential request to each server.
 **Answer:**
 Servers get traffic proportional to weight.
 
+```javascript
+class WRR{constructor(s){this.e=s.flatMap(x=>Array(x.w).fill(x.h))}next(){return this.e[this.i++%this.e.length]}}
+```
+
 ### Q208. Least connections?
 **Level:** Intermediate
 
 **Answer:**
 Route to server with fewest active connections.
+
+```javascript
+class LC{pick(){return this.s.reduce((a,b)=>a.c<b.c?a:b)}}
+```
 
 ### Q209. IP hash?
 **Level:** Intermediate
@@ -1308,6 +1376,10 @@ Hash client IP for sticky routing.
 
 **Answer:**
 Minimal redistribution on server add/remove.
+
+```javascript
+class CH{get(k){/* hash ring */}}
+```
 
 ### Q211. L4 load balancer?
 **Level:** Intermediate
@@ -1561,17 +1633,29 @@ gzip/brotli reduces bandwidth.
 **Answer:**
 Cursor-based avoids OFFSET cost.
 
+```javascript
+class Bus{constructor(){this.l={}}on(e,fn){(this.l[e]??=[]).push(fn)}emit(e,d){(this.l[e]||[]).forEach(fn=>fn(d))}}
+```
+
 ### Q253. Data locality?
 **Level:** Advanced
 
 **Answer:**
 Process data near storage to reduce network.
 
+```javascript
+class MQ{constructor(){this.q=[]}enq(m){this.q.push(m)}}
+```
+
 ### Q254. Edge computing?
 **Level:** Advanced
 
 **Answer:**
 Compute at CDN edge for low latency.
+
+```javascript
+class IC{constructor(){this.s=new Set()}consume(m){if(this.s.has(m.id))return;this.s.add(m.id)}}
+```
 
 ### Q255. Serverless scaling?
 **Level:** Intermediate
@@ -1865,11 +1949,19 @@ In-process pub/sub decouples modules.
 **Answer:**
 DB trigger or CDC → event stream.
 
+```javascript
+class CB{constructor(){this.f=0;this.s='CLOSED'}async call(fn){if(this.s==='OPEN')throw Error();try{return await fn()}catch(e){if(++this.f>=5)this.s='OPEN';throw e}}}
+```
+
 ### Q303. Notification service design?
 **Level:** Intermediate
 
 **Answer:**
 Queue per channel; workers send email/SMS/push.
+
+```javascript
+async function retry(fn,n=3){for(let i=0;i<n;i++){try{return await fn()}catch(e){await new Promise(r=>setTimeout(r,2**i*1000))}}}
+```
 
 ### Q304. Log aggregation?
 **Level:** Intermediate
@@ -1877,11 +1969,19 @@ Queue per channel; workers send email/SMS/push.
 **Answer:**
 Fluentd/Logstash → Elasticsearch.
 
+```javascript
+class Idem{constructor(){this.c=new Map()}async go(k,fn){if(this.c.has(k))return this.c.get(k);const r=await fn();this.c.set(k,r);return r}}
+```
+
 ### Q305. Metrics pipeline?
 **Level:** Intermediate
 
 **Answer:**
 StatsD/Prometheus → Grafana.
+
+```javascript
+class Reg{constructor(){this.s={}}add(n,i){(this.s[n]??=[]).push(i)}get(n){const l=this.s[n];return l[Math.floor(Math.random()*l.length)]}}
+```
 
 ### Q306. Trace propagation?
 **Level:** Advanced
@@ -2163,11 +2263,19 @@ Gradually replace monolith by routing to new services.
 **Answer:**
 Order → Payment → Inventory with compensations.
 
+```javascript
+async function fanW(t,f){await Promise.all(f.map(u=>tl.add(u,t)))}
+```
+
 ### Q352. Leader election use cases?
 **Level:** Advanced
 
 **Answer:**
 Single writer, scheduled jobs, failover.
+
+```javascript
+async function fanR(u,fs){const t=await Promise.all(fs.map(getTweets));return t.flat().sort((a,b)=>b.ts-a.ts)}
+```
 
 ### Q353. Split-brain prevention?
 **Level:** Advanced
@@ -2233,11 +2341,19 @@ Map service deps to understand cascade failures.
 **Answer:**
 API: shorten/redirect. Base62 encoding. Counter or hash. SQL/NoSQL for mapping. Redis cache hot URLs. Analytics async.
 
+```javascript
+class Short{constructor(){this.m=new Map();this.n=1}shorten(u){const c=(this.n++).toString(36);this.m.set(c,u);return c}}
+```
+
 ### Q363. URL shortener — hash collision?
 **Level:** Intermediate
 
 **Answer:**
 Check DB on collision; append salt and retry.
+
+```javascript
+class Paste{create(c,ttl=3600){const id=Math.random().toString(36).slice(2);this.store.set(id,{c,exp:Date.now()+ttl*1000});return id}}
+```
 
 ### Q364. URL shortener — scale?
 **Level:** Intermediate
@@ -2257,6 +2373,10 @@ Store text blob in object storage (S3). Metadata in DB. TTL expiry job.
 **Answer:**
 Post tweet, timeline, follow, search. Fan-out on write vs read. Redis cache. Kafka events.
 
+```javascript
+class RL{allow(id){const n=Date.now();const h=(this.m.get(id)||[]).filter(t=>n-t<this.w);if(h.length>=this.max)return false;h.push(n);this.m.set(id,h);return true}}
+```
+
 ### Q367. Twitter fan-out on write?
 **Level:** Advanced
 
@@ -2269,6 +2389,10 @@ Precompute follower timelines on tweet — fast read, slow write for celebrities
 **Answer:**
 Merge tweets on read — slow read, simple write. Hybrid for celebrities.
 
+```javascript
+class Trie{insert(w){let n=this.root;for(const c of w){n.children??={};n=n.children[c]??={};}}}
+```
+
 ### Q369. Design Instagram?
 **Level:** Advanced
 
@@ -2280,6 +2404,10 @@ Photo upload to S3, metadata DB, feed generation, CDN for images.
 
 **Answer:**
 Ranking ML model, fan-out hybrid, cache per user feed.
+
+```javascript
+class LB{update(u,s){this.m.set(u,(this.m.get(u)||0)+s)}top(n){return[...this.m].sort((a,b)=>b[1]-a[1]).slice(0,n)}}
+```
 
 ### Q371. Design WhatsApp/Messenger?
 **Level:** Advanced
@@ -2305,6 +2433,10 @@ CDN (Open Connect), microservices, recommendation, adaptive bitrate streaming.
 **Answer:**
 Geo-index (QuadTree/Geohash), matching service, real-time location via WebSocket.
 
+```javascript
+class Snowflake{gen(){return((Date.now()-this.epoch)<<22)|(this.mid<<12)|this.seq++}}
+```
+
 ### Q375. Uber surge pricing?
 **Level:** Advanced
 
@@ -2317,17 +2449,29 @@ Demand/supply ratio per geo cell; dynamic multiplier.
 **Answer:**
 Search (Elasticsearch), booking with inventory lock, payments, reviews.
 
+```javascript
+class CM{send(u,m){this.c.get(u)?.send(JSON.stringify(m))}}
+```
+
 ### Q377. Design Amazon/e-commerce?
 **Level:** Advanced
 
 **Answer:**
 Catalog, cart, inventory, order, payment, search, recommendations.
 
+```javascript
+const near=(ds,lat,lng,r)=>ds.filter(d=>dist(lat,lng,d.lat,d.lng)<=r)
+```
+
 ### Q378. Design payment system?
 **Level:** Advanced
 
 **Answer:**
 Idempotency, ledger (double-entry), PCI compliance, fraud detection.
+
+```javascript
+const surge=(d,s)=>s===0?3:Math.min(3,1+d/s*0.5)
+```
 
 ### Q379. Design notification system?
 **Level:** Intermediate
@@ -2340,6 +2484,10 @@ Multi-channel (email/SMS/push), template engine, preference, queue workers.
 
 **Answer:**
 Token bucket/sliding window in Redis. Middleware checks before handler.
+
+```javascript
+class Hold{hold(s,seat,u){const k=`${s}:${seat}`;this.h.set(k,{u,exp:Date.now()+300000});setTimeout(()=>this.h.delete(k),300000)}}
+```
 
 ### Q381. Design distributed cache?
 **Level:** Intermediate
@@ -2376,6 +2524,10 @@ Chunked upload, metadata DB, block storage, sync via version vectors.
 
 **Answer:**
 Block-level diff, metadata server, conflict copies.
+
+```javascript
+class NSvc{async notify(u,m,p){if(p.email)await email.send(u.email,m)}}
+```
 
 ### Q387. Design ticket booking (BookMyShow)?
 **Level:** Intermediate
@@ -2773,11 +2925,19 @@ String DB, CDN cache per locale, fallback chain.
 **Answer:**
 Event subscription, signed delivery, retry DLQ, delivery logs.
 
+```javascript
+async function hook(url,p){for(let i=0;i<3;i++){try{const r=await fetch(url,{method:'POST',body:JSON.stringify(p)});if(r.ok)return}catch(e){}await sleep(2**i*1000)}}
+```
+
 ### Q453. Design CI/CD system?
 **Level:** Advanced
 
 **Answer:**
 Git webhook → build workers → artifact store → deploy pipeline.
+
+```javascript
+class Tenant{static id=null;static set(i){this.id=i}}
+```
 
 ### Q454. Design container orchestration?
 **Level:** Advanced
@@ -2897,11 +3057,19 @@ Async work, spike absorption, decouple services.
 **Answer:**
 Start monolith; split when team scale or independent scaling needed.
 
+```javascript
+class GW{use(m){this.m.push(m)}async handle(r){for(const m of this.m)await m(r);return this.route(r)}}
+```
+
 ### Q473. Domain-Driven Design in HLD?
 **Level:** Advanced
 
 **Answer:**
 Bounded contexts map to services; ubiquitous language.
+
+```javascript
+class Bloom{add(i){for(let k=0;k<3;k++)this.bits[this.hash(i,k)]=1}has(i){for(let k=0;k<3;k++)if(!this.bits[this.hash(i,k)])return false;return true}}
+```
 
 ### Q474. Event storming?
 **Level:** Advanced
@@ -2909,11 +3077,19 @@ Bounded contexts map to services; ubiquitous language.
 **Answer:**
 Workshop to discover domain events and aggregates.
 
+```javascript
+class SWRL{allow(k){const n=Date.now();const h=(this.m.get(k)||[]).filter(t=>n-t<this.w);if(h.length>=this.l)return false;h.push(n);this.m.set(k,h);return true}}
+```
+
 ### Q475. API gateway patterns?
 **Level:** Advanced
 
 **Answer:**
 Routing, auth, rate limit, response aggregation, protocol translation.
+
+```javascript
+class FF{on(n,ctx){return this.f[n]?.users?.includes(ctx.uid)||hash(ctx.uid)%100<this.f[n]?.pct}}
+```
 
 ### Q476. Service mesh benefits?
 **Level:** Advanced
@@ -2921,11 +3097,19 @@ Routing, auth, rate limit, response aggregation, protocol translation.
 **Answer:**
 mTLS, observability, traffic management without app code changes.
 
+```javascript
+const bucket=(uid,exp)=>hash(`${uid}:${exp}`)%100
+```
+
 ### Q477. Sidecar proxy?
 **Level:** Advanced
 
 **Answer:**
 Envoy alongside each pod handles network concerns.
+
+```javascript
+class Analytics{track(e){this.b.push({...e,ts:Date.now()});if(this.b.length>=100)this.flush()}}
+```
 
 ### Q478. Kubernetes architecture?
 **Level:** Advanced

@@ -8,8 +8,8 @@ Most asked **LLD** and **HLD** interview questions with answers — Basic to Adv
 
 | Topic | Questions | Link |
 |-------|-----------|------|
-| **Low Level Design (LLD)** | 510 Q&A | [Go to LLD Questions →](docs/LLD.md) |
-| **High Level Design (HLD)** | 607 Q&A | [Go to HLD Questions →](docs/HLD.md) |
+| **Low Level Design (LLD)** | 510 Q&A · 103 JS snippets | [Go to LLD Questions →](docs/LLD.md) |
+| **High Level Design (HLD)** | 607 Q&A · 47 JS snippets | [Go to HLD Questions →](docs/HLD.md) |
 
 ---
 

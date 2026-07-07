@@ -1,7 +1,7 @@
 # Low Level Design (LLD) Interview Questions & Answers
 
 > **500 Most Asked LLD Interview Questions** — Basic to Advanced  
-> Format: Question → Answer | JavaScript snippets where applicable
+> Format: Question → Answer | **103 JavaScript code snippets**
 
 ---
 
@@ -85,7 +85,9 @@ class Dog extends Animal { speak() { return 'bark'; } }
 Same interface, different runtime behavior.
 
 ```javascript
-function speak(a) { return a.speak(); }
+class Dog extends Animal { speak() { return 'bark'; } }
+class Cat extends Animal { speak() { return 'meow'; } }
+function makeSpeak(a) { return a.speak(); }
 ```
 
 ### Q6. Class vs Object?
@@ -94,11 +96,20 @@ function speak(a) { return a.speak(); }
 **Answer:**
 Class = blueprint. Object = instance of class.
 
+```javascript
+class Car { constructor(brand) { this.brand = brand; } }
+const tesla = new Car('Tesla');
+```
+
 ### Q7. What is a constructor?
 **Level:** Basic
 
 **Answer:**
 Initializes state on instantiation via `new`.
+
+```javascript
+class Product { constructor(id, name, price) { Object.assign(this,{id,name,price}); } }
+```
 
 ### Q8. Method overriding?
 **Level:** Basic
@@ -106,11 +117,20 @@ Initializes state on instantiation via `new`.
 **Answer:**
 Subclass provides own implementation of parent method.
 
+```javascript
+class Shape { area() { return 0; } }
+class Circle extends Shape { constructor(r) { super(); this.r=r; } area() { return Math.PI*this.r**2; } }
+```
+
 ### Q9. Method overloading in JS?
 **Level:** Basic
 
 **Answer:**
 Use default/variadic parameters; no true overloading.
+
+```javascript
+function createUser(name, role='user') { return { name, role }; }
+```
 
 ### Q10. Composition over inheritance?
 **Level:** Intermediate
@@ -118,11 +138,19 @@ Use default/variadic parameters; no true overloading.
 **Answer:**
 Combine objects/behaviors instead of deep inheritance trees.
 
+```javascript
+const canFly={fly(){return'flying'}}; class Duck{constructor(){Object.assign(this,canFly)}}
+```
+
 ### Q11. What is an interface?
 **Level:** Basic
 
 **Answer:**
 Contract without implementation. JS: duck typing.
+
+```javascript
+class Logger{log(m){console.log(m)}}
+```
 
 ### Q12. Abstract class?
 **Level:** Intermediate
@@ -130,11 +158,19 @@ Contract without implementation. JS: duck typing.
 **Answer:**
 Cannot instantiate; subclasses implement abstract methods.
 
+```javascript
+class P{run(){throw Error()}} class IP extends P{run(){return'ok'}}
+```
+
 ### Q13. Coupling?
 **Level:** Basic
 
 **Answer:**
 Inter-module dependency. Keep it low.
+
+```javascript
+class EmailSvc{constructor(p){this.p=p}}
+```
 
 ### Q14. Cohesion?
 **Level:** Basic
@@ -142,11 +178,19 @@ Inter-module dependency. Keep it low.
 **Answer:**
 Focus of module responsibilities. Keep it high.
 
+```javascript
+class Calc{total(items,t){return items.reduce((s,i)=>s+i.p*i.q,0)*(1+t)}}
+```
+
 ### Q15. IS-A vs HAS-A?
 **Level:** Basic
 
 **Answer:**
 Inheritance vs composition. Prefer HAS-A.
+
+```javascript
+class Car{constructor(){this.engine={start(){return'on'}}}}
+```
 
 ### Q16. Static methods?
 **Level:** Basic
@@ -154,17 +198,29 @@ Inheritance vs composition. Prefer HAS-A.
 **Answer:**
 Belong to class, not instance.
 
+```javascript
+class M{static add(a,b){return a+b}}
+```
+
 ### Q17. Immutable object?
 **Level:** Intermediate
 
 **Answer:**
 State cannot change after creation.
 
+```javascript
+class Money{constructor(a,c){Object.freeze(Object.assign(this,{amount:a,currency:c}))}}
+```
+
 ### Q18. Value object?
 **Level:** Intermediate
 
 **Answer:**
 Equality by value, not identity.
+
+```javascript
+class Email{constructor(a){this.a=a.toLowerCase()} equals(o){return this.a===o.a}}
+```
 
 ### Q19. Aggregation vs Composition?
 **Level:** Intermediate
@@ -178,17 +234,29 @@ Weak vs strong ownership of contained objects.
 **Answer:**
 Data carrier across layers without business logic.
 
+```javascript
+class UserDTO{constructor(d){Object.assign(this,d)}}
+```
+
 ### Q21. Namespace/module?
 **Level:** Basic
 
 **Answer:**
 Group related code; JS modules.
 
+```javascript
+export class User{constructor(n){this.name=n}}
+```
+
 ### Q22. Getter/setter?
 **Level:** Basic
 
 **Answer:**
 Controlled property access.
+
+```javascript
+class T{#c=0;get f(){return this.#c*9/5+32}set c(v){this.#c=v}}
+```
 
 ### Q23. Duck typing?
 **Level:** Basic
@@ -202,11 +270,19 @@ Type determined by behavior.
 **Answer:**
 Reusable behavior without inheritance.
 
+```javascript
+const L=B=>class extends B{log(m){console.log(m)}}
+```
+
 ### Q25. Prototype chain?
 **Level:** Basic
 
 **Answer:**
 JS inheritance via prototype objects.
+
+```javascript
+const base={greet(){return'hi'}}; Object.create(base)
+```
 
 ### Q26. Shallow vs deep clone?
 **Level:** Intermediate
@@ -214,17 +290,29 @@ JS inheritance via prototype objects.
 **Answer:**
 `{...obj}` vs `structuredClone(obj)`.
 
+```javascript
+structuredClone({user:{name:'Alice'}})
+```
+
 ### Q27. Law of Demeter?
 **Level:** Intermediate
 
 **Answer:**
 Only talk to immediate collaborators.
 
+```javascript
+class Account{withdraw(a){if(a>this.balance)throw Error();this.balance-=a}}
+```
+
 ### Q28. Tell, Don't Ask?
 **Level:** Intermediate
 
 **Answer:**
 Tell objects what to do; don't query and decide externally.
+
+```javascript
+class Order{addItem(i){if(this.status!=='PENDING')throw Error();this.items.push(i)}}
+```
 
 ### Q29. Domain model?
 **Level:** Intermediate
@@ -238,11 +326,19 @@ Business entities with enforced invariants.
 **Answer:**
 Entities without behavior — anti-pattern.
 
+```javascript
+class Order{#items=[];addItem(i){this.#items.push(i)}total(){return this.#items.reduce((s,i)=>s+i.price,0)}}
+```
+
 ### Q31. Entity vs Value Object?
 **Level:** Intermediate
 
 **Answer:**
 Identity-based vs value-based objects.
+
+```javascript
+class User{constructor(id,n){this.id=id;this.name=n}}
+```
 
 ### Q32. Aggregate Root?
 **Level:** Advanced
@@ -250,11 +346,19 @@ Identity-based vs value-based objects.
 **Answer:**
 Entry point to a cluster of domain objects.
 
+```javascript
+class UserRepo{constructor(db){this.db=db}findById(id){return this.db.find(id)}}
+```
+
 ### Q33. Repository (concept)?
 **Level:** Intermediate
 
 **Answer:**
 Abstraction over persistence.
+
+```javascript
+Object.seal({a:1}); Object.freeze({a:1})
+```
 
 ### Q34. Service layer?
 **Level:** Intermediate
@@ -279,6 +383,10 @@ Structural vs temporary relationship.
 
 **Answer:**
 Cardinality of relationships.
+
+```javascript
+class UserSvc{create(){}} class EmailSvc{send(){}}
+```
 
 ### Q38. Fat/God class?
 **Level:** Basic
@@ -428,6 +536,10 @@ SRP, OCP, LSP, ISP, DIP.
 **Answer:**
 One class, one reason to change.
 
+```javascript
+class User{constructor(n){this.name=n}} class Repo{save(){}} class Email{send(){}}
+```
+
 ### Q62. SRP example violation?
 **Level:** Intermediate
 
@@ -439,6 +551,10 @@ User class doing auth + email + DB.
 
 **Answer:**
 Open for extension, closed for modification.
+
+```javascript
+class Disc{apply(p){return p}} class Student extends Disc{apply(p){return p*0.9}}
+```
 
 ### Q64. OCP + Strategy?
 **Level:** Intermediate
@@ -452,6 +568,10 @@ New strategies extend without modifying context.
 **Answer:**
 Subtypes substitutable for base types.
 
+```javascript
+class Fly{fly(){return'fly'}} class NoFly{walk(){return'walk'}}
+```
+
 ### Q66. LSP violation example?
 **Level:** Intermediate
 
@@ -464,17 +584,29 @@ Penguin extends Bird but can't fly.
 **Answer:**
 No fat interfaces; split by client needs.
 
+```javascript
+class Workable{work(){}} class Human{work(){return'working'}}
+```
+
 ### Q68. Dependency Inversion Principle?
 **Level:** Intermediate
 
 **Answer:**
 Depend on abstractions, not concretions.
 
+```javascript
+class Svc{constructor(db){this.db=db}}
+```
+
 ### Q69. Dependency Injection?
 **Level:** Intermediate
 
 **Answer:**
 Pass dependencies in from outside.
+
+```javascript
+class NS{constructor(s){this.s=s}notify(m){this.s.send(m)}
+```
 
 ### Q70. Constructor vs Setter injection?
 **Level:** Intermediate
@@ -488,6 +620,10 @@ Required vs optional dependencies.
 **Answer:**
 Framework wiring dependency graph.
 
+```javascript
+class Container{constructor(){this.m=new Map()}register(k,f){this.m.set(k,f)}resolve(k){return this.m.get(k)(this)}}
+```
+
 ### Q72. DIP vs DI?
 **Level:** Intermediate
 
@@ -499,6 +635,10 @@ Principle vs technique.
 
 **Answer:**
 Framework calls your code.
+
+```javascript
+class FW{run(app){app.init();app.handle()}}
+```
 
 ### Q74. God Object anti-pattern?
 **Level:** Basic
@@ -523,6 +663,10 @@ Many reasons to change one class.
 
 **Answer:**
 Service boundaries mirror principles.
+
+```javascript
+const h={pdf:exportPdf,csv:exportCsv}; const run=(t,d)=>h[t](d)
+```
 
 ### Q78. When to break SOLID?
 **Level:** Advanced
@@ -757,17 +901,29 @@ Global state, hard to test.
 **Answer:**
 Subclass decides instantiated type.
 
+```javascript
+class Dialog{createBtn(){throw Error()}} class Web extends Dialog{createBtn(){return{render:()=>'btn'}}}
+```
+
 ### Q115. Simple Factory?
 **Level:** Basic
 
 **Answer:**
 Central creation function by type param.
 
+```javascript
+const m={email:EmailNotif,sms:SmsNotif}; const create=t=>new m[t]()
+```
+
 ### Q116. Abstract Factory?
 **Level:** Advanced
 
 **Answer:**
 Families of related products.
+
+```javascript
+class DF{btn(){return new DarkBtn()}check(){return new DarkCheck()}}
+```
 
 ### Q117. Builder?
 **Level:** Intermediate
@@ -795,11 +951,19 @@ Factory: which type. Builder: how to configure.
 **Answer:**
 Clone existing object as template.
 
+```javascript
+const p={greet(){return`Hi ${this.name}`}}; Object.create(p)
+```
+
 ### Q120. Object Pool?
 **Level:** Advanced
 
 **Answer:**
 Reuse expensive instances.
+
+```javascript
+class Pool{constructor(max,f){this.max=max;this.pool=[];this.f=f}acquire(){return this.pool.pop()||this.f()}}
+```
 
 ### Q121. When Factory?
 **Level:** Basic
@@ -819,11 +983,19 @@ Many optional constructor params.
 **Answer:**
 Too many overloads — use Builder.
 
+```javascript
+class UB{constructor(n){this.d={name:n}}email(e){this.d.email=e;return this}build(){return this.d}}
+```
+
 ### Q124. Lazy init?
 **Level:** Intermediate
 
 **Answer:**
 Create on first access.
+
+```javascript
+class H{static #i;static get(){return this.#i??=new H()}}
+```
 
 ### Q125. Multiton?
 **Level:** Advanced
@@ -831,17 +1003,29 @@ Create on first access.
 **Answer:**
 One instance per key.
 
+```javascript
+const inst=new Map(); const get=k=>inst.get(k)||inst.set(k,{}).get(k)
+```
+
 ### Q126. Static factory method?
 **Level:** Intermediate
 
 **Answer:**
 `User.fromJSON(data)` named constructors.
 
+```javascript
+class User{static fromJSON(j){return new User(JSON.parse(j).name)}}
+```
+
 ### Q127. Fluent interface?
 **Level:** Intermediate
 
 **Answer:**
 Method chaining returns `this`.
+
+```javascript
+class QB{from(t){this.t=t;return this}where(c){this.c=c;return this}build(){return`SELECT * FROM ${this.t} WHERE ${this.c}`}}
+```
 
 ### Q128. Director in Builder?
 **Level:** Advanced
@@ -1047,6 +1231,10 @@ Creator → Product inheritance.
 **Answer:**
 DarkThemeFactory vs LightThemeFactory.
 
+```javascript
+class Legacy{fetch(){return'old'}} class Adapter{constructor(l){this.l=l}get(){return this.l.fetch()}}
+```
+
 ---
 
 ## 4. Structural Design Patterns
@@ -1056,6 +1244,10 @@ DarkThemeFactory vs LightThemeFactory.
 
 **Answer:**
 Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy.
+
+```javascript
+class Facade{order(u,i){this.auth.verify(u);return this.pay.charge(u,i)}}
+```
 
 ### Q163. Adapter Pattern?
 **Level:** Intermediate
@@ -1090,6 +1282,10 @@ class MilkDecorator {
 
 **Answer:**
 Simplified interface to complex subsystem.
+
+```javascript
+class N{constructor(s){this.s=s}notify(m){return this.s.send(m)}}
+```
 
 ### Q166. Proxy Pattern?
 **Level:** Intermediate
@@ -1396,6 +1592,10 @@ Package price = sum of component prices.
 **Answer:**
 Thousands of objects share few shared instances.
 
+```javascript
+class File{constructor(n,s){this.n=n;this.s=s}getSize(){return this.s}} class Dir{constructor(){this.c=[]}getSize(){return this.c.reduce((a,f)=>a+f.getSize(),0)}}
+```
+
 ---
 
 ## 5. Behavioral Design Patterns
@@ -1405,6 +1605,10 @@ Thousands of objects share few shared instances.
 
 **Answer:**
 Observer, Strategy, Command, State, Template Method, Iterator, Chain of Responsibility, Mediator, Memento, Visitor, Interpreter.
+
+```javascript
+class ChatRoom{send(m,from,to){to.receive(m,from)}}
+```
 
 ### Q214. Observer Pattern?
 **Level:** Basic
@@ -1730,6 +1934,10 @@ Established, Listen, Closed states.
 
 **Answer:**
 Store mediates components.
+
+```javascript
+class TL{constructor(){this.s='RED'}next(){const n={RED:'GREEN',GREEN:'YELLOW',YELLOW:'RED'};return this.s=n[this.s]}}
+```
 
 ### Q257. Memento caretaker?
 **Level:** Advanced
@@ -2087,6 +2295,10 @@ Folded corner comment box.
 **Answer:**
 ParkingLot, Floor, ParkingSpot, Vehicle (Car/Bike/Truck), Ticket, Payment, EntranceGate, ExitGate.
 
+```javascript
+class ParkingLot{constructor(spots){this.spots=spots;this.tickets=new Map()}park(v){const s=this.spots.find(s=>!s.occupied);if(!s)return null;s.occupied=true;const t={id:Date.now(),s};this.tickets.set(t.id,t);return t}}
+```
+
 ### Q315. Parking Lot — spot assignment?
 **Level:** Intermediate
 
@@ -2128,6 +2340,10 @@ class ParkingLot {
 **Answer:**
 Elevator, Floor, Request, Controller, Direction enum, scheduling algorithm.
 
+```javascript
+class Elevator{constructor(id){this.id=id;this.floor=0;this.req=[]}add(f){this.req.push(f)}}
+```
+
 ### Q319. Elevator scheduling?
 **Level:** Advanced
 
@@ -2154,6 +2370,10 @@ class Elevator {
 
 **Answer:**
 Book, Member, Librarian, Catalog, Loan, Reservation, Fine.
+
+```javascript
+class Book{constructor(i,t){this.isbn=i;this.title=t}}
+```
 
 ### Q322. Library — search?
 **Level:** Intermediate
@@ -2245,6 +2465,10 @@ Product, Inventory, Coin inventory, State pattern for coin insertion.
 **Answer:**
 Idle, HasMoney, Dispensing, ReturnChange.
 
+```javascript
+class VM{constructor(){this.bal=0}coin(a){this.bal+=a}}
+```
+
 ### Q334. Design Hotel Booking?
 **Level:** Intermediate
 
@@ -2263,11 +2487,19 @@ Optimistic lock on reservation slot; transaction on book.
 **Answer:**
 Cinema, Screen, Show, Seat, Booking, Payment — seat lock during checkout.
 
+```javascript
+class LRU{constructor(c){this.c=c;this.m=new Map()}get(k){if(!this.m.has(k))return-1;const v=this.m.get(k);this.m.delete(k);this.m.set(k,v);return v}put(k,v){if(this.m.has(k))this.m.delete(k);this.m.set(k,v);if(this.m.size>this.c)this.m.delete(this.m.keys().next().value)}}
+```
+
 ### Q337. Seat locking strategy?
 **Level:** Intermediate
 
 **Answer:**
 Temporary hold (5 min TTL) then release.
+
+```javascript
+class TB{constructor(r,c){this.r=r;this.c=c;this.t=c;this.l=Date.now()}allow(){const n=Date.now();this.t=Math.min(this.c,this.t+(n-this.l)/1000*this.r);this.l=n;if(this.t>=1){this.t--;return true}return false}}
+```
 
 ### Q338. Design Restaurant Order System?
 **Level:** Intermediate
@@ -2275,11 +2507,19 @@ Temporary hold (5 min TTL) then release.
 **Answer:**
 Menu, Order, OrderItem, KitchenQueue, Bill, Table.
 
+```javascript
+class Logger{constructor(a){this.a=a}log(l,m){this.a.forEach(x=>x.write(l,m))}}
+```
+
 ### Q339. Design Food Delivery (LLD)?
 **Level:** Intermediate
 
 **Answer:**
 Customer, Restaurant, Order, DeliveryAgent, Tracker, Rating.
+
+```javascript
+class Short{constructor(){this.m=new Map();this.n=1}shorten(u){const c=(this.n++).toString(36);this.m.set(c,u);return c}}
+```
 
 ### Q340. Design Splitwise?
 **Level:** Intermediate
@@ -2287,11 +2527,19 @@ Customer, Restaurant, Order, DeliveryAgent, Tracker, Rating.
 **Answer:**
 User, Group, Expense, Split (equal/exact/%), BalanceSheet.
 
+```javascript
+class Broker{constructor(){this.t=new Map()}sub(topic,cb){(this.t.get(topic)??this.t.set(topic,[]).get(topic)).push(cb)}pub(topic,m){(this.t.get(topic)||[]).forEach(cb=>cb(m))}}
+```
+
 ### Q341. Splitwise balance?
 **Level:** Advanced
 
 **Answer:**
 Minimize transactions via debt simplification graph.
+
+```javascript
+class KV{constructor(){this.s=new Map()}set(k,v){this.s.set(k,v)}get(k){return this.s.get(k)??null}}
+```
 
 ### Q342. Design Stack Overflow (LLD)?
 **Level:** Intermediate
@@ -2362,11 +2610,19 @@ class TokenBucket {
 **Answer:**
 Logger, Appender (File/Console), Formatter, LogLevel, singleton or DI.
 
+```javascript
+class MinStack{constructor(){this.s=[];this.m=[]}push(v){this.s.push(v);this.m.push(Math.min(this.m.at(-1)??v,v))}}
+```
+
 ### Q348. Design Task Scheduler?
 **Level:** Intermediate
 
 **Answer:**
 Task, PriorityQueue, Worker, Cron expression parser.
+
+```javascript
+class CmdMgr{constructor(){this.u=[]}run(c){c.exec();this.u.push(c)}undo(){this.u.pop()?.undo()}}
+```
 
 ### Q349. Design URL Shortener (LLD)?
 **Level:** Intermediate
@@ -2379,6 +2635,10 @@ UrlMap, Base62Encoder, Counter/Hash, RedirectService, Analytics.
 
 **Answer:**
 Topic, Publisher, Subscriber, Message, Broker, Subscription.
+
+```javascript
+class Wallet{constructor(){this.b=0;this.t=[]}credit(a,k){if(this.t.find(x=>x.k===k))return;this.b+=a;this.t.push({a,k})}}
+```
 
 ### Q351. Design Key-Value Store (LLD)?
 **Level:** Intermediate
@@ -2403,6 +2663,10 @@ User, Meeting, Room, Calendar, ConflictDetector.
 
 **Answer:**
 Vehicle, Reservation, Customer, Pricing, Availability.
+
+```javascript
+class CB{constructor(t=5){this.f=0;this.t=t;this.s='CLOSED'}call(fn){if(this.s==='OPEN')throw Error();try{const r=fn();this.f=0;return r}catch(e){if(++this.f>=this.t)this.s='OPEN';throw e}}}
+```
 
 ### Q355. Design Course Registration?
 **Level:** Intermediate
@@ -2686,6 +2950,10 @@ Card, balance, partial redemption, expiry.
 **Answer:**
 Heap-based priority queue.
 
+```javascript
+class Mutex{constructor(){this.c=Promise.resolve()}run(fn){this.c=this.c.then(fn);return this.c}}
+```
+
 ### Q402. Design Barcode/QR ticket?
 **Level:** Intermediate
 
@@ -2933,11 +3201,19 @@ Represents async result.
 **Answer:**
 Use async-mutex npm or queue serial execution.
 
+```javascript
+function errHandler(e,req,res,n){res.status(e.status||500).json({error:e.message})}
+```
+
 ### Q442. Concurrent LRU?
 **Level:** Advanced
 
 **Answer:**
 Per-segment locks or single lock — trade throughput.
+
+```javascript
+app.use('/api/v1',v1Router); app.use('/api/v2',v2Router)
+```
 
 ### Q443. Double-checked locking?
 **Level:** Advanced
@@ -2945,17 +3221,29 @@ Per-segment locks or single lock — trade throughput.
 **Answer:**
 Lazy init with reduced locking. Careful with memory ordering.
 
+```javascript
+function validate(s){return(req,res,n)=>{const{error}=s.validate(req.body);if(error)return res.status(400).json({error:error.message});n()}}
+```
+
 ### Q444. Thread-local storage?
 **Level:** Advanced
 
 **Answer:**
 Per-thread data copy.
 
+```javascript
+const ok=d=>({success:true,data:d}); const fail=(c,m)=>({success:false,error:{code:c,message:m}})
+```
+
 ### Q445. Green threads vs OS threads?
 **Level:** Advanced
 
 **Answer:**
 Green: user-space scheduled (goroutines). OS: kernel scheduled.
+
+```javascript
+class RBAC{has(u,p){return(this.roles[u.role]||[]).includes(p)}}
+```
 
 ### Q446. Actor model?
 **Level:** Advanced
@@ -3117,11 +3405,19 @@ Schema validate body/params (Zod/Joi).
 **Answer:**
 Consistent `{ data, meta, errors }` envelope.
 
+```javascript
+class OrderSvc{constructor(r,p,n){this.r=r;this.p=p;this.n=n}place(o){this.r.save(o);this.p.charge(o.total);this.n.send(o.uid)}}
+```
+
 ### Q472. Content negotiation?
 **Level:** Advanced
 
 **Answer:**
 Accept header for JSON vs XML.
+
+```javascript
+class OrderPlaced{constructor(id){this.id=id}} eventBus.pub(new OrderPlaced(1))
+```
 
 ### Q473. Webhook design?
 **Level:** Advanced
@@ -3129,17 +3425,29 @@ Accept header for JSON vs XML.
 **Answer:**
 Signed payload, retry with backoff, idempotency.
 
+```javascript
+class CmdSvc{create(){}} class QrySvc{get(){}}
+```
+
 ### Q474. OpenAPI/Swagger role?
 **Level:** Intermediate
 
 **Answer:**
 Contract documentation and client generation.
 
+```javascript
+class ES{append(id,e){this.e.push({id,e})}rebuild(id){return this.e.filter(x=>x.id===id)}}
+```
+
 ### Q475. API backward compatibility?
 **Level:** Intermediate
 
 **Answer:**
 Additive changes only; deprecate old fields.
+
+```javascript
+async function save(o,db){await db.tx(async t=>{await t.insert('orders',o);await t.insert('outbox',{type:'Created',o})})}
+```
 
 ### Q476. Bulk operations API?
 **Level:** Advanced
