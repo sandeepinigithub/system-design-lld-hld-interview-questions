@@ -1,7 +1,8 @@
 # High Level Design (HLD) Interview Questions & Answers
 
 > **500 Most Asked HLD Interview Questions** — Basic to Advanced  
-> Format: Question → Answer | **47 JavaScript code snippets**
+> Format: Question → Answer | **47 code snippets**  
+> **Snippet Language:** All code examples are labeled **`Snippet Language: JavaScript`**
 
 ---
 
@@ -30,6 +31,8 @@
 
 **Answer:**
 HLD defines **system architecture** — components, data flow, APIs, storage, scaling — without implementation details.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const architecture = {
@@ -80,6 +83,8 @@ Quick math: QPS, storage, bandwidth from DAU and usage patterns.
 **Answer:**
 QPS = DAU × actions_per_user / 86400. Peak ≈ 2-3× average.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const qps = (10_000_000 * 5) / 86400;
 const peak = qps * 3;
@@ -91,6 +96,8 @@ const peak = qps * 3;
 **Answer:**
 Daily data × retention period × replication factor.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const tb = (500_000_000 * 300 * 365 * 5 * 3) / 1024 ** 4;
 ```
@@ -100,6 +107,8 @@ const tb = (500_000_000 * 300 * 365 * 5 * 3) / 1024 ** 4;
 
 **Answer:**
 Request size × QPS for ingress/egress.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const mbps = (50 * 1024 * 10000 * 8) / (1024 * 1024);
@@ -117,6 +126,8 @@ User-facing: <200ms read, <500ms write typical targets.
 **Answer:**
 8.76 hours downtime/year. 99.99% = 52.6 min/year.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const down = ((100 - 99.9) / 100) * 8760;
 ```
@@ -132,6 +143,8 @@ System handles growth by adding resources.
 
 **Answer:**
 Vertical: bigger machine. Horizontal: more machines (preferred).
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Cluster {
@@ -300,6 +313,8 @@ Reduce features under load instead of full failure.
 **Answer:**
 Many clients retry simultaneously. Fix: jitter, backoff.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const delay = 1000 * 2 ** i + Math.random() * 1000;
 ```
@@ -381,6 +396,8 @@ Roll out to small % traffic first.
 
 **Answer:**
 Two identical envs; switch traffic atomically.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const routes = { "GET /users": "list", "POST /users": "create" };
@@ -690,6 +707,8 @@ CDN, rate limiting, WAF, scrubbing centers.
 **Answer:**
 Web Application Firewall — blocks malicious HTTP.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const idx = new Map(users.map((u) => [u.email, u]));
 ```
@@ -704,6 +723,8 @@ const idx = new Map(users.map((u) => [u.email, u]));
 **Answer:**
 SQL: structured, ACID, relations. NoSQL: flexible schema, scale-out.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const shard = (id) =>
   String(id)
@@ -716,6 +737,8 @@ const shard = (id) =>
 
 **Answer:**
 Atomicity, Consistency, Isolation, Durability.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Router {
@@ -1016,6 +1039,8 @@ Read uncommitted, read committed, repeatable read, serializable.
 **Answer:**
 Cycle of lock waits. DB detects and aborts one.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class LRU {
   constructor(c) {
@@ -1032,6 +1057,8 @@ class LRU {
 
 **Answer:**
 Version column — update fails if version changed.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 async function getUser(id) {
@@ -1064,6 +1091,8 @@ Hit: data in cache. Miss: fetch from origin.
 
 **Answer:**
 LRU, LFU, FIFO, TTL, random.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 async function upd(id, d) {
@@ -1352,6 +1381,8 @@ Nginx proxy_cache for HTTP responses.
 **Level:** Intermediate
 
 **Answer:**
+**Snippet Language:** JavaScript
+
 ```javascript
 async function getUser(id) {
   const cached = await redis.get(`user:${id}`);
@@ -1378,6 +1409,8 @@ Strong consistency required, data changes constantly, low read ratio.
 **Answer:**
 Distribute traffic across multiple servers.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class RR {
   constructor(s) {
@@ -1402,6 +1435,8 @@ Sequential request to each server.
 **Answer:**
 Servers get traffic proportional to weight.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class WRR {
   constructor(s) {
@@ -1418,6 +1453,8 @@ class WRR {
 
 **Answer:**
 Route to server with fewest active connections.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class LC {
@@ -1438,6 +1475,8 @@ Hash client IP for sticky routing.
 
 **Answer:**
 Minimal redistribution on server add/remove.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class CH {
@@ -1699,6 +1738,8 @@ gzip/brotli reduces bandwidth.
 **Answer:**
 Cursor-based avoids OFFSET cost.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Bus {
   constructor() {
@@ -1719,6 +1760,8 @@ class Bus {
 **Answer:**
 Process data near storage to reduce network.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class MQ {
   constructor() {
@@ -1735,6 +1778,8 @@ class MQ {
 
 **Answer:**
 Compute at CDN edge for low latency.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class IC {
@@ -2040,6 +2085,8 @@ In-process pub/sub decouples modules.
 **Answer:**
 DB trigger or CDC → event stream.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class CB {
   constructor() {
@@ -2064,6 +2111,8 @@ class CB {
 **Answer:**
 Queue per channel; workers send email/SMS/push.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 async function retry(fn, n = 3) {
   for (let i = 0; i < n; i++) {
@@ -2081,6 +2130,8 @@ async function retry(fn, n = 3) {
 
 **Answer:**
 Fluentd/Logstash → Elasticsearch.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Idem {
@@ -2101,6 +2152,8 @@ class Idem {
 
 **Answer:**
 StatsD/Prometheus → Grafana.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Reg {
@@ -2397,6 +2450,8 @@ Gradually replace monolith by routing to new services.
 **Answer:**
 Order → Payment → Inventory with compensations.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 async function fanW(t, f) {
   await Promise.all(f.map((u) => tl.add(u, t)));
@@ -2408,6 +2463,8 @@ async function fanW(t, f) {
 
 **Answer:**
 Single writer, scheduled jobs, failover.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 async function fanR(u, fs) {
@@ -2480,6 +2537,8 @@ Map service deps to understand cascade failures.
 **Answer:**
 API: shorten/redirect. Base62 encoding. Counter or hash. SQL/NoSQL for mapping. Redis cache hot URLs. Analytics async.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Short {
   constructor() {
@@ -2499,6 +2558,8 @@ class Short {
 
 **Answer:**
 Check DB on collision; append salt and retry.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Paste {
@@ -2528,6 +2589,8 @@ Store text blob in object storage (S3). Metadata in DB. TTL expiry job.
 **Answer:**
 Post tweet, timeline, follow, search. Fan-out on write vs read. Redis cache. Kafka events.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class RL {
   allow(id) {
@@ -2553,6 +2616,8 @@ Precompute follower timelines on tweet — fast read, slow write for celebrities
 **Answer:**
 Merge tweets on read — slow read, simple write. Hybrid for celebrities.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Trie {
   insert(w) {
@@ -2576,6 +2641,8 @@ Photo upload to S3, metadata DB, feed generation, CDN for images.
 
 **Answer:**
 Ranking ML model, fan-out hybrid, cache per user feed.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class LB {
@@ -2612,6 +2679,8 @@ CDN (Open Connect), microservices, recommendation, adaptive bitrate streaming.
 **Answer:**
 Geo-index (QuadTree/Geohash), matching service, real-time location via WebSocket.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Snowflake {
   gen() {
@@ -2634,6 +2703,8 @@ Demand/supply ratio per geo cell; dynamic multiplier.
 **Answer:**
 Search (Elasticsearch), booking with inventory lock, payments, reviews.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class CM {
   send(u, m) {
@@ -2648,6 +2719,8 @@ class CM {
 **Answer:**
 Catalog, cart, inventory, order, payment, search, recommendations.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const near = (ds, lat, lng, r) =>
   ds.filter((d) => dist(lat, lng, d.lat, d.lng) <= r);
@@ -2658,6 +2731,8 @@ const near = (ds, lat, lng, r) =>
 
 **Answer:**
 Idempotency, ledger (double-entry), PCI compliance, fraud detection.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const surge = (d, s) => (s === 0 ? 3 : Math.min(3, 1 + (d / s) * 0.5));
@@ -2674,6 +2749,8 @@ Multi-channel (email/SMS/push), template engine, preference, queue workers.
 
 **Answer:**
 Token bucket/sliding window in Redis. Middleware checks before handler.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Hold {
@@ -2720,6 +2797,8 @@ Chunked upload, metadata DB, block storage, sync via version vectors.
 
 **Answer:**
 Block-level diff, metadata server, conflict copies.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class NSvc {
@@ -3125,6 +3204,8 @@ String DB, CDN cache per locale, fallback chain.
 **Answer:**
 Event subscription, signed delivery, retry DLQ, delivery logs.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 async function hook(url, p) {
   for (let i = 0; i < 3; i++) {
@@ -3145,6 +3226,8 @@ async function hook(url, p) {
 
 **Answer:**
 Git webhook → build workers → artifact store → deploy pipeline.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Tenant {
@@ -3273,6 +3356,8 @@ Async work, spike absorption, decouple services.
 **Answer:**
 Start monolith; split when team scale or independent scaling needed.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class GW {
   use(m) {
@@ -3290,6 +3375,8 @@ class GW {
 
 **Answer:**
 Bounded contexts map to services; ubiquitous language.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Bloom {
@@ -3310,6 +3397,8 @@ class Bloom {
 **Answer:**
 Workshop to discover domain events and aggregates.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class SWRL {
   allow(k) {
@@ -3329,6 +3418,8 @@ class SWRL {
 **Answer:**
 Routing, auth, rate limit, response aggregation, protocol translation.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class FF {
   on(n, ctx) {
@@ -3346,6 +3437,8 @@ class FF {
 **Answer:**
 mTLS, observability, traffic management without app code changes.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const bucket = (uid, exp) => hash(`${uid}:${exp}`) % 100;
 ```
@@ -3355,6 +3448,8 @@ const bucket = (uid, exp) => hash(`${uid}:${exp}`) % 100;
 
 **Answer:**
 Envoy alongside each pod handles network concerns.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Analytics {

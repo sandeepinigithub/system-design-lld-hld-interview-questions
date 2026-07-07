@@ -1,8 +1,9 @@
 # Low Level Design (LLD) Interview Questions & Answers
 
 > **500 Most Asked LLD Interview Questions** — Basic to Advanced  
-> Format: Question → Answer | **103+ code snippets**  
-> **Multi-language examples:** Concepts not natively available in JavaScript (interfaces, abstract classes, method overloading, enums, generics, etc.) include a **JavaScript workaround**, native **TypeScript**, and **Python** example.
+> Format: Question → Answer | **133+ code snippets**  
+> **Snippet Language:** Every code block is labeled with its language (`JavaScript`, `TypeScript`, or `Python`).  
+> **Multi-language examples:** Concepts not native to JavaScript include all three languages side by side.
 
 ---
 
@@ -50,6 +51,8 @@
 **Answer:**
 OOP organizes software around **objects** — bundles of data and behavior. Four pillars: Encapsulation, Abstraction, Inheritance, Polymorphism.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class BankAccount {
   #balance = 0;
@@ -67,6 +70,8 @@ class BankAccount {
 
 **Answer:**
 Hide internal state; expose controlled access.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class User {
@@ -86,6 +91,8 @@ class User {
 **Answer:**
 Expose **what**, hide **how**.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class PaymentService {
   pay(amount) {
@@ -102,6 +109,8 @@ class PaymentService {
 
 **Answer:**
 Child reuses/extends parent.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Animal {
@@ -121,6 +130,8 @@ class Dog extends Animal {
 
 **Answer:**
 Same interface, different runtime behavior.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Dog extends Animal {
@@ -144,6 +155,8 @@ function makeSpeak(animal) {
 **Answer:**
 Class = blueprint. Object = instance of class.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Car {
   constructor(brand) {
@@ -159,6 +172,8 @@ const tesla = new Car("Tesla");
 **Answer:**
 Initializes state on instantiation via `new`.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Product {
   constructor(id, name, price) {
@@ -172,6 +187,8 @@ class Product {
 
 **Answer:**
 Subclass provides own implementation of parent method.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Shape {
@@ -196,7 +213,7 @@ class Circle extends Shape {
 **Answer:**
 JavaScript has **no true method overloading** — use default parameters, rest args, or runtime type checks. **TypeScript** supports compile-time overload signatures. **Python** uses `@overload` for type hints with a single implementation.
 
-**JavaScript** (workaround):
+**Snippet Language:** JavaScript (workaround)
 ```javascript
 function createUser(name, email = null, role = "user") {
   return { name, email, role };
@@ -208,7 +225,7 @@ createUser("Bob", "bob@example.com");
 createUser("Carol", "carol@example.com", "admin");
 ```
 
-**TypeScript** (native overloads):
+**Snippet Language:** TypeScript (native overloads)
 ```typescript
 interface User {
   name: string;
@@ -223,7 +240,7 @@ function createUser(name: string, email?: string, role = "user"): User {
 }
 ```
 
-**Python**:
+**Snippet Language:** Python
 ```python
 from typing import overload
 
@@ -242,6 +259,8 @@ def create_user(name, email=None, role="user"):
 
 **Answer:**
 Combine objects/behaviors instead of deep inheritance trees.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const canFly = {
@@ -262,7 +281,7 @@ class Duck {
 **Answer:**
 A **contract without implementation** — defines *what* a type must do, not *how*. JavaScript has no `interface` keyword; it relies on **duck typing**. **TypeScript** and **Python** (`Protocol` / `ABC`) provide explicit contracts.
 
-**JavaScript** (duck typing):
+**Snippet Language:** JavaScript (duck typing)
 ```javascript
 // No interface keyword — any object with a log() method works
 class ConsoleLogger {
@@ -282,7 +301,7 @@ function audit(logger, event) {
 }
 ```
 
-**TypeScript** (native interface):
+**Snippet Language:** TypeScript (native interface)
 ```typescript
 interface Logger {
   log(message: string): void;
@@ -299,7 +318,7 @@ function audit(logger: Logger, event: string): void {
 }
 ```
 
-**Python** (Protocol — structural typing):
+**Snippet Language:** Python (Protocol — structural typing)
 ```python
 from typing import Protocol
 
@@ -320,7 +339,7 @@ def audit(logger: Logger, event: str) -> None:
 **Answer:**
 Cannot be instantiated directly; subclasses **must** implement abstract methods. JavaScript has no `abstract` keyword — simulate by throwing in base methods. **TypeScript** has `abstract class`. **Python** uses `abc.ABC`.
 
-**JavaScript** (simulated):
+**Snippet Language:** JavaScript (simulated)
 ```javascript
 class Processor {
   run() {
@@ -338,7 +357,7 @@ class ImageProcessor extends Processor {
 new ImageProcessor().run(); // "processing image"
 ```
 
-**TypeScript** (native):
+**Snippet Language:** TypeScript (native)
 ```typescript
 abstract class Processor {
   abstract run(): string;
@@ -353,7 +372,7 @@ class ImageProcessor extends Processor {
 // const p = new Processor(); // compile error
 ```
 
-**Python** (ABC):
+**Snippet Language:** Python (ABC)
 ```python
 from abc import ABC, abstractmethod
 
@@ -372,6 +391,8 @@ class ImageProcessor(Processor):
 **Answer:**
 Inter-module dependency. Keep it low.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class EmailSvc {
   constructor(p) {
@@ -386,6 +407,8 @@ class EmailSvc {
 **Answer:**
 Focus of module responsibilities. Keep it high.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Calc {
   total(items, t) {
@@ -399,6 +422,8 @@ class Calc {
 
 **Answer:**
 Inheritance vs composition. Prefer HAS-A.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Car {
@@ -418,6 +443,8 @@ class Car {
 **Answer:**
 Belong to class, not instance.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class M {
   static add(a, b) {
@@ -432,6 +459,8 @@ class M {
 **Answer:**
 State cannot change after creation.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Money {
   constructor(a, c) {
@@ -445,6 +474,8 @@ class Money {
 
 **Answer:**
 Equality by value, not identity.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Email {
@@ -469,6 +500,8 @@ Weak vs strong ownership of contained objects.
 **Answer:**
 Data carrier across layers without business logic.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class UserDTO {
   constructor(d) {
@@ -483,6 +516,8 @@ class UserDTO {
 **Answer:**
 Group related code; JS modules.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 export class User {
   constructor(n) {
@@ -496,6 +531,8 @@ export class User {
 
 **Answer:**
 Controlled property access.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class T {
@@ -515,7 +552,7 @@ class T {
 **Answer:**
 *"If it walks like a duck and quacks like a duck, it's a duck."* Type is determined by **behavior/shape**, not explicit inheritance. Native in **JavaScript** and **Python**. **TypeScript** uses **structural typing** — compatible if the shape matches, even without `implements`.
 
-**JavaScript**:
+**Snippet Language:** JavaScript
 ```javascript
 class Dog {
   speak() {
@@ -537,7 +574,7 @@ announce(new Dog());   // "woof"
 announce(new Robot()); // "beep"
 ```
 
-**TypeScript** (structural typing):
+**Snippet Language:** TypeScript (structural typing)
 ```typescript
 interface Speaker {
   speak(): string;
@@ -554,7 +591,7 @@ class Dog {
 }
 ```
 
-**Python**:
+**Snippet Language:** Python
 ```python
 class Dog:
     def speak(self):
@@ -577,6 +614,8 @@ announce(Robot())  # "beep"
 **Answer:**
 Reusable behavior without inheritance.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const L = (B) =>
   class extends B {
@@ -591,6 +630,8 @@ const L = (B) =>
 
 **Answer:**
 JS inheritance via prototype objects.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const base = {
@@ -607,6 +648,8 @@ Object.create(base);
 **Answer:**
 `{...obj}` vs `structuredClone(obj)`.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 structuredClone({ user: { name: "Alice" } });
 ```
@@ -616,6 +659,8 @@ structuredClone({ user: { name: "Alice" } });
 
 **Answer:**
 Only talk to immediate collaborators.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Account {
@@ -631,6 +676,8 @@ class Account {
 
 **Answer:**
 Tell objects what to do; don't query and decide externally.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Order {
@@ -653,6 +700,8 @@ Business entities with enforced invariants.
 **Answer:**
 Entities without behavior — anti-pattern.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Order {
   #items = [];
@@ -671,6 +720,8 @@ class Order {
 **Answer:**
 Identity-based vs value-based objects.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class User {
   constructor(id, n) {
@@ -685,6 +736,8 @@ class User {
 
 **Answer:**
 Entry point to a cluster of domain objects.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class UserRepo {
@@ -702,6 +755,8 @@ class UserRepo {
 
 **Answer:**
 Abstraction over persistence.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 Object.seal({ a: 1 });
@@ -731,6 +786,8 @@ Structural vs temporary relationship.
 
 **Answer:**
 Cardinality of relationships.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class UserSvc {
@@ -889,6 +946,8 @@ SRP, OCP, LSP, ISP, DIP.
 **Answer:**
 One class, one reason to change.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class User {
   constructor(n) {
@@ -915,6 +974,8 @@ User class doing auth + email + DB.
 **Answer:**
 Open for extension, closed for modification.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Disc {
   apply(p) {
@@ -939,6 +1000,8 @@ New strategies extend without modifying context.
 
 **Answer:**
 Subtypes substitutable for base types.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Fly {
@@ -965,7 +1028,7 @@ Penguin extends Bird but can't fly.
 **Answer:**
 No **fat interfaces** — split into small, client-specific contracts. JavaScript uses separate mixin objects; **TypeScript** splits `interface`s; **Python** splits `Protocol`s.
 
-**JavaScript** (small focused shapes):
+**Snippet Language:** JavaScript (small focused shapes)
 ```javascript
 const canWork = { work() { return "working"; } };
 const canEat = { eat() { return "eating"; } };
@@ -983,7 +1046,7 @@ class Robot {
 }
 ```
 
-**TypeScript** (segregated interfaces):
+**Snippet Language:** TypeScript (segregated interfaces)
 ```typescript
 interface Workable {
   work(): void;
@@ -1004,7 +1067,7 @@ class Robot implements Workable {
 }
 ```
 
-**Python** (segregated Protocols):
+**Snippet Language:** Python (segregated Protocols)
 ```python
 from typing import Protocol
 
@@ -1028,6 +1091,8 @@ class Robot:
 **Answer:**
 Depend on abstractions, not concretions.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Svc {
   constructor(db) {
@@ -1041,6 +1106,8 @@ class Svc {
 
 **Answer:**
 Pass dependencies in from outside.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class NotificationService {
@@ -1068,6 +1135,8 @@ Required vs optional dependencies.
 
 **Answer:**
 Framework wiring dependency graph.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Container {
@@ -1097,6 +1166,8 @@ Principle vs technique.
 
 **Answer:**
 Framework calls your code.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Framework {
@@ -1131,6 +1202,8 @@ Many reasons to change one class.
 
 **Answer:**
 Service boundaries mirror principles.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 const h = { pdf: exportPdf, csv: exportCsv };
@@ -1311,7 +1384,7 @@ Subtype shouldn't add unexpected throws.
 **Answer:**
 In JavaScript, **duck typing** replaces explicit interfaces for Dependency Inversion — depend on objects that expose the required methods. **TypeScript** formalizes this with interfaces. **Python** uses `Protocol` or `ABC`.
 
-**JavaScript** (duck typing):
+**Snippet Language:** JavaScript (duck typing)
 ```javascript
 class EmailSender {
   send(to, body) {
@@ -1334,7 +1407,7 @@ new NotificationService(new EmailSender()).notify(
 );
 ```
 
-**TypeScript** (interface):
+**Snippet Language:** TypeScript (interface)
 ```typescript
 interface MessageSender {
   send(to: string, body: string): void;
@@ -1354,7 +1427,7 @@ class NotificationService {
 }
 ```
 
-**Python** (Protocol):
+**Snippet Language:** Python (Protocol)
 ```python
 from typing import Protocol
 
@@ -1379,7 +1452,7 @@ class NotificationService:
 **Answer:**
 Open for extension, closed for modification — add new payment providers without changing existing code. Use a **PaymentProvider** contract. JavaScript relies on duck typing; **TypeScript** uses `interface`; **Python** uses `Protocol`/`ABC`.
 
-**JavaScript**:
+**Snippet Language:** JavaScript
 ```javascript
 class StripeProvider {
   pay(amount) {
@@ -1406,7 +1479,7 @@ class Checkout {
 new Checkout(new StripeProvider()).process(100);
 ```
 
-**TypeScript**:
+**Snippet Language:** TypeScript
 ```typescript
 interface PaymentProvider {
   pay(amount: number): string;
@@ -1426,7 +1499,7 @@ class Checkout {
 }
 ```
 
-**Python**:
+**Snippet Language:** Python
 ```python
 from typing import Protocol
 
@@ -1479,6 +1552,8 @@ Singleton, Factory Method, Abstract Factory, Builder, Prototype.
 **Answer:**
 One global instance.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class DB {
   static #i;
@@ -1500,7 +1575,7 @@ Global state, hard to test.
 **Answer:**
 Subclass decides which concrete type to instantiate. The base **abstract method** pattern is simulated in JavaScript; native in **TypeScript** and **Python**.
 
-**JavaScript** (throw as abstract):
+**Snippet Language:** JavaScript (throw as abstract)
 ```javascript
 class Dialog {
   createButton() {
@@ -1519,7 +1594,7 @@ class WebDialog extends Dialog {
 }
 ```
 
-**TypeScript** (abstract method):
+**Snippet Language:** TypeScript (abstract method)
 ```typescript
 abstract class Dialog {
   abstract createButton(): { render(): string };
@@ -1535,7 +1610,7 @@ class WebDialog extends Dialog {
 }
 ```
 
-**Python** (ABC):
+**Snippet Language:** Python (ABC)
 ```python
 from abc import ABC, abstractmethod
 
@@ -1557,6 +1632,8 @@ class WebDialog(Dialog):
 **Answer:**
 Central creation function by type param.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const m = { email: EmailNotif, sms: SmsNotif };
 const create = (t) => new m[t]();
@@ -1567,6 +1644,8 @@ const create = (t) => new m[t]();
 
 **Answer:**
 Families of related products.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class DF {
@@ -1584,6 +1663,8 @@ class DF {
 
 **Answer:**
 Fluent step-by-step construction.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class ReqBuilder {
@@ -1613,6 +1694,8 @@ Factory: which type. Builder: how to configure.
 **Answer:**
 Clone existing object as template.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const p = {
   greet() {
@@ -1627,6 +1710,8 @@ Object.create(p);
 
 **Answer:**
 Reuse expensive instances.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Pool {
@@ -1659,6 +1744,8 @@ Many optional constructor params.
 **Answer:**
 Too many overloads — use Builder.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class UB {
   constructor(n) {
@@ -1680,6 +1767,8 @@ class UB {
 **Answer:**
 Create on first access.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class H {
   static #i;
@@ -1695,6 +1784,8 @@ class H {
 **Answer:**
 One instance per key.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const inst = new Map();
 const get = (k) => inst.get(k) || inst.set(k, {}).get(k);
@@ -1705,6 +1796,8 @@ const get = (k) => inst.get(k) || inst.set(k, {}).get(k);
 
 **Answer:**
 `User.fromJSON(data)` named constructors.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class User {
@@ -1719,6 +1812,8 @@ class User {
 
 **Answer:**
 Method chaining returns `this`.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class QB {
@@ -1862,7 +1957,7 @@ Freeze object in `build()`.
 **Answer:**
 Factory hides concrete class — callers depend on a **contract**, not implementation. JavaScript uses duck typing; **TypeScript** returns an `interface` type; **Python** returns a `Protocol` type.
 
-**JavaScript**:
+**Snippet Language:** JavaScript
 ```javascript
 function createNotifier(type) {
   const types = {
@@ -1876,7 +1971,7 @@ const notifier = createNotifier("email");
 notifier.send("Order shipped");
 ```
 
-**TypeScript**:
+**Snippet Language:** TypeScript
 ```typescript
 interface Notifier {
   send(message: string): void;
@@ -1891,7 +1986,7 @@ function createNotifier(type: "email" | "sms"): Notifier {
 }
 ```
 
-**Python**:
+**Snippet Language:** Python
 ```python
 from typing import Protocol
 
@@ -1988,6 +2083,8 @@ Creator → Product inheritance.
 **Answer:**
 DarkThemeFactory vs LightThemeFactory.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Legacy {
   fetch() {
@@ -2014,6 +2111,8 @@ class Adapter {
 **Answer:**
 Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Facade {
   order(u, i) {
@@ -2028,6 +2127,8 @@ class Facade {
 
 **Answer:**
 Convert interface to one client expects.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class OldAPI {
@@ -2051,6 +2152,8 @@ class Adapter {
 **Answer:**
 Add behavior dynamically.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Coffee {
   cost() {
@@ -2073,6 +2176,8 @@ class MilkDecorator {
 **Answer:**
 Simplified interface to complex subsystem.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class N {
   constructor(s) {
@@ -2089,6 +2194,8 @@ class N {
 
 **Answer:**
 Surrogate controlling access.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class RealImage {
@@ -2124,6 +2231,8 @@ Separate abstraction from implementation.
 
 **Answer:**
 Tree structure treated uniformly.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class File {
@@ -2406,6 +2515,8 @@ Package price = sum of component prices.
 **Answer:**
 Thousands of objects share few shared instances.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class File {
   constructor(n, s) {
@@ -2436,6 +2547,8 @@ class Dir {
 **Answer:**
 Observer, Strategy, Command, State, Template Method, Iterator, Chain of Responsibility, Mediator, Memento, Visitor, Interpreter.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class ChatRoom {
   send(m, from, to) {
@@ -2449,6 +2562,8 @@ class ChatRoom {
 
 **Answer:**
 Pub-sub: subjects notify observers.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class EventEmitter {
@@ -2470,6 +2585,8 @@ class EventEmitter {
 **Answer:**
 Interchangeable algorithms.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const strategies = {
   road: (a, b) => a + b,
@@ -2485,6 +2602,8 @@ function route(type, a, b) {
 
 **Answer:**
 Encapsulate request as object.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Command {
@@ -2513,6 +2632,8 @@ class Invoker {
 **Answer:**
 Object behavior changes with internal state.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Locked {
   unlock(d) {
@@ -2540,6 +2661,8 @@ class Door {
 **Answer:**
 Skeleton algorithm; subclasses fill steps.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class DataParser {
   parse(raw) {
@@ -2561,6 +2684,8 @@ class DataParser {
 **Answer:**
 Pass request along handler chain.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Handler {
   setNext(h) {
@@ -2579,6 +2704,8 @@ class Handler {
 **Answer:**
 Traverse collection without exposing internals.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Range {
   constructor(max) {
@@ -2596,6 +2723,8 @@ class Range {
 **Answer:**
 Central coordinator reduces peer coupling.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class ChatRoom {
   send(msg, from, to) {
@@ -2609,6 +2738,8 @@ class ChatRoom {
 
 **Answer:**
 Save/restore object state.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class EditorMemento {
@@ -2829,6 +2960,8 @@ Established, Listen, Closed states.
 
 **Answer:**
 Store mediates components.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class TL {
@@ -3068,7 +3201,7 @@ Black dot = initial. Bullseye = final.
 **Answer:**
 UML: `+` public, `-` private, `#` protected. JavaScript only has `#` private fields (no `protected`). **TypeScript** adds `public`/`private`/`protected` (compile-time). **Python** uses naming conventions (`_`, `__`).
 
-**JavaScript** (`#` private only):
+**Snippet Language:** JavaScript (`#` private only)
 ```javascript
 class BankAccount {
   #balance = 0; // truly private field
@@ -3083,7 +3216,7 @@ class BankAccount {
 }
 ```
 
-**TypeScript** (public / private / protected):
+**Snippet Language:** TypeScript (public / private / protected)
 ```typescript
 class BankAccount {
   public accountId: string;
@@ -3101,7 +3234,7 @@ class BankAccount {
 }
 ```
 
-**Python** (convention-based):
+**Snippet Language:** Python (convention-based)
 ```python
 class BankAccount:
     def __init__(self, account_id: str, pin: str):
@@ -3243,6 +3376,8 @@ Folded corner comment box.
 **Answer:**
 ParkingLot, Floor, ParkingSpot, Vehicle (Car/Bike/Truck), Ticket, Payment, EntranceGate, ExitGate.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class ParkingLot {
   constructor(spots) {
@@ -3278,6 +3413,8 @@ Lock spot on entry; release on exit. Queue if full.
 **Level:** Intermediate
 
 **Answer:**
+**Snippet Language:** JavaScript
+
 ```javascript
 class ParkingLot {
   constructor(floors) {
@@ -3306,7 +3443,7 @@ class ParkingLot {
 **Answer:**
 Elevator, Floor, Request, Controller, **Direction enum**, scheduling algorithm. JavaScript has no native `enum` — use frozen objects. **TypeScript** and **Python** have native enums.
 
-**JavaScript** (const object):
+**Snippet Language:** JavaScript (const object)
 ```javascript
 const Direction = Object.freeze({
   UP: "UP",
@@ -3328,7 +3465,7 @@ class Elevator {
 }
 ```
 
-**TypeScript** (native enum):
+**Snippet Language:** TypeScript (native enum)
 ```typescript
 enum Direction {
   UP = "UP",
@@ -3350,7 +3487,7 @@ class Elevator {
 }
 ```
 
-**Python** (Enum):
+**Snippet Language:** Python (Enum)
 ```python
 from enum import Enum
 
@@ -3380,6 +3517,8 @@ SCAN/LOOK algorithm, priority for emergencies.
 **Level:** Intermediate
 
 **Answer:**
+**Snippet Language:** JavaScript
+
 ```javascript
 class Elevator {
   constructor(id, floors) {
@@ -3402,6 +3541,8 @@ class Elevator {
 
 **Answer:**
 Book, Member, Librarian, Catalog, Loan, Reservation, Fine.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Book {
@@ -3440,6 +3581,8 @@ Idle → CardInserted → PinEntered → Transaction → EjectCard.
 **Level:** Intermediate
 
 **Answer:**
+**Snippet Language:** JavaScript
+
 ```javascript
 class ATM {
   constructor(bank) {
@@ -3479,6 +3622,8 @@ Board 3x3, Player X/O, Game checks win/draw after each move.
 **Level:** Basic
 
 **Answer:**
+**Snippet Language:** JavaScript
+
 ```javascript
 class Board {
   constructor() {
@@ -3530,6 +3675,8 @@ Product, Inventory, Coin inventory, State pattern for coin insertion.
 **Answer:**
 Idle, HasMoney, Dispensing, ReturnChange.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class VM {
   constructor() {
@@ -3559,6 +3706,8 @@ Optimistic lock on reservation slot; transaction on book.
 **Answer:**
 Cinema, Screen, Show, Seat, Booking, Payment — seat lock during checkout.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class LRU {
   constructor(c) {
@@ -3585,6 +3734,8 @@ class LRU {
 
 **Answer:**
 Temporary hold (5 min TTL) then release.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class TokenBucket {
@@ -3618,6 +3769,8 @@ class TokenBucket {
 **Answer:**
 Menu, Order, OrderItem, KitchenQueue, Bill, Table.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Logger {
   constructor(a) {
@@ -3634,6 +3787,8 @@ class Logger {
 
 **Answer:**
 Customer, Restaurant, Order, DeliveryAgent, Tracker, Rating.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Short {
@@ -3655,6 +3810,8 @@ class Short {
 **Answer:**
 User, Group, Expense, Split (equal/exact/%), BalanceSheet.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Broker {
   constructor() {
@@ -3674,6 +3831,8 @@ class Broker {
 
 **Answer:**
 Minimize transactions via debt simplification graph.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class KV {
@@ -3713,6 +3872,8 @@ Cart, CartItem, Product, Inventory, PricingService, Checkout.
 **Answer:**
 HashMap + Doubly Linked List for O(1) get/put.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class LRUCache {
   constructor(cap) {
@@ -3742,6 +3903,8 @@ class LRUCache {
 
 **Answer:**
 Token bucket or sliding window.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class TokenBucket {
@@ -3773,6 +3936,8 @@ class TokenBucket {
 **Answer:**
 Logger, Appender (File/Console), Formatter, LogLevel, singleton or DI.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class MinStack {
   constructor() {
@@ -3791,6 +3956,8 @@ class MinStack {
 
 **Answer:**
 Task, PriorityQueue, Worker, Cron expression parser.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class CmdMgr {
@@ -3818,6 +3985,8 @@ UrlMap, Base62Encoder, Counter/Hash, RedirectService, Analytics.
 
 **Answer:**
 Topic, Publisher, Subscriber, Message, Broker, Subscription.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class Wallet {
@@ -3856,6 +4025,8 @@ User, Meeting, Room, Calendar, ConflictDetector.
 
 **Answer:**
 Vehicle, Reservation, Customer, Pricing, Availability.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class CB {
@@ -4160,6 +4331,8 @@ Card, balance, partial redemption, expiry.
 **Answer:**
 Heap-based priority queue.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class Mutex {
   constructor() {
@@ -4306,6 +4479,8 @@ Microtasks (promises) before macrotasks (setTimeout).
 **Level:** Advanced
 
 **Answer:**
+**Snippet Language:** JavaScript
+
 ```javascript
 const { Worker } = require("worker_threads");
 new Worker("./task.js");
@@ -4419,6 +4594,8 @@ Represents async result.
 **Answer:**
 Use async-mutex npm or queue serial execution.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 function errHandler(e, req, res, n) {
   res.status(e.status || 500).json({ error: e.message });
@@ -4431,6 +4608,8 @@ function errHandler(e, req, res, n) {
 **Answer:**
 Per-segment locks or single lock — trade throughput.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 app.use("/api/v1", v1Router);
 app.use("/api/v2", v2Router);
@@ -4441,6 +4620,8 @@ app.use("/api/v2", v2Router);
 
 **Answer:**
 Lazy init with reduced locking. Careful with memory ordering.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 function validate(s) {
@@ -4458,6 +4639,8 @@ function validate(s) {
 **Answer:**
 Per-thread data copy.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 const ok = (d) => ({ success: true, data: d });
 const fail = (c, m) => ({
@@ -4471,6 +4654,8 @@ const fail = (c, m) => ({
 
 **Answer:**
 Green: user-space scheduled (goroutines). OS: kernel scheduled.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class RBAC {
@@ -4640,6 +4825,8 @@ Schema validate body/params (Zod/Joi).
 **Answer:**
 Consistent `{ data, meta, errors }` envelope.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class OrderSvc {
   constructor(r, p, n) {
@@ -4661,6 +4848,8 @@ class OrderSvc {
 **Answer:**
 Accept header for JSON vs XML.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class OrderPlaced {
   constructor(id) {
@@ -4676,6 +4865,8 @@ eventBus.pub(new OrderPlaced(1));
 **Answer:**
 Signed payload, retry with backoff, idempotency.
 
+**Snippet Language:** JavaScript
+
 ```javascript
 class CmdSvc {
   create() {}
@@ -4690,6 +4881,8 @@ class QrySvc {
 
 **Answer:**
 Contract documentation and client generation.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 class ES {
@@ -4707,6 +4900,8 @@ class ES {
 
 **Answer:**
 Additive changes only; deprecate old fields.
+
+**Snippet Language:** JavaScript
 
 ```javascript
 async function save(o, db) {
@@ -4853,7 +5048,7 @@ Runtime class inspection — use sparingly; breaks types.
 **Answer:**
 A generic `Repository<T>` is convenient but can leak persistence into the domain. JavaScript has **no generics** — use conventions or JSDoc. **TypeScript** and **Python** support type-parameterized repositories.
 
-**JavaScript** (no generics — duck typing):
+**Snippet Language:** JavaScript (no generics — duck typing)
 ```javascript
 class UserRepository {
   constructor(store) {
@@ -4870,7 +5065,7 @@ class UserRepository {
 }
 ```
 
-**TypeScript** (generic repository):
+**Snippet Language:** TypeScript (generic repository)
 ```typescript
 interface Repository<T, ID = string> {
   findById(id: ID): Promise<T | null>;
@@ -4890,7 +5085,7 @@ class UserRepository implements Repository<User> {
 }
 ```
 
-**Python** (Generic):
+**Snippet Language:** Python (Generic)
 ```python
 from typing import Generic, TypeVar, Protocol
 
