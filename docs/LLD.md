@@ -1782,14 +1782,56 @@ class H {
 **Level:** Advanced
 
 **Answer:**
-One instance per key.
+
+A **Multiton** ensures there is **one shared instance for each unique key**, rather than one global instance like a Singleton. It is useful when you need exactly one object per category, tenant, database, or configuration.
+
+**Use Cases:**
+- Database connections (one per database type)
+- Logger instances (one per log category)
+- Cache managers (one per cache name)
+- Multi-tenant application configurations
 
 **Snippet Language:** JavaScript
 
 ```javascript
-const inst = new Map();
-const get = (k) => inst.get(k) || inst.set(k, {}).get(k);
+class DatabaseConnection {
+  constructor(type) {
+    this.type = type;
+    console.log(`${type} connection created`);
+  }
+
+  static instances = new Map();
+
+  static getInstance(type) {
+    if (!this.instances.has(type)) {
+      this.instances.set(type, new DatabaseConnection(type));
+    }
+
+    return this.instances.get(type);
+  }
+}
+
+const pg1 = DatabaseConnection.getInstance("Postgres");
+const pg2 = DatabaseConnection.getInstance("Postgres");
+const mongo = DatabaseConnection.getInstance("MongoDB");
+
+console.log(pg1 === pg2);   // true
+console.log(pg1 === mongo); // false
 ```
+
+**Output:**
+
+```
+Postgres connection created
+MongoDB connection created
+true
+false
+```
+
+**Interview Tip:**
+
+- **Singleton** → One instance for the entire application.
+- **Multiton** → One instance for each unique key.
 
 ### Q126. Static factory method?
 **Level:** Intermediate
